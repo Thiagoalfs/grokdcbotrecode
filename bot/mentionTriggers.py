@@ -7,20 +7,6 @@ async def mention_triggers(bot, message):
             await message.channel.send("oi fi po fala")
             return
         
-        if re.search(r'(?<!\w)(salve)(?!\w)', message.content.lower()):
-            message.mentions.remove(bot.user)
-            if len(message.mentions) == 0:
-                await message.channel.send("um salve ai meu mano " + message.author.mention)
-            elif len(message.mentions) > 1:
-                await message.channel.send("marca só um ai pit. o salve é só pra um de cada vez", reference=message)
-            else:
-                await message.channel.send("um salve ai pro meu mano " + message.mentions[0].mention)
-            return
-        
-        if re.search(r'(?<!\w)(smt|se mata)(?!\w)', message.content.lower()):
-            await message.channel.send("se mata tu ze oxi", reference=message)
-            return
-        
         elif message.reference:
             referenced_message = await message.channel.fetch_message(message.reference.message_id)
             
@@ -48,6 +34,21 @@ async def mention_triggers(bot, message):
             else:
                 await message.channel.send(resposta)
             return
+        
+        elif re.search(r'(?<!\w)(salve)(?!\w)', message.content.lower()):
+            message.mentions.remove(bot.user)
+            if len(message.mentions) == 0:
+                await message.channel.send("um salve ai meu mano " + message.author.mention)
+            elif len(message.mentions) > 1:
+                await message.channel.send("marca só um ai pit. o salve é só pra um de cada vez", reference=message)
+            else:
+                await message.channel.send("um salve ai pro meu mano " + message.mentions[0].mention)
+            return
+        
+        elif re.search(r'(?<!\w)(smt|se mata)(?!\w)', message.content.lower()):
+            await message.channel.send("se mata tu ze oxi", reference=message)
+            return
+        
         else:
             await message.channel.send(respostas(), reference=message)
         
