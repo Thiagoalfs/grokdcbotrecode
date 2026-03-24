@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from messageTriggers import message_triggers
 from variables import botToken
-from mentionTriggers import mention_triggers
 
 intents = discord.Intents.default()
 intents.message_content = True
