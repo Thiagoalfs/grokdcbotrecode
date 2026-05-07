@@ -1,5 +1,4 @@
 import re, random
-from variables import gif_atual
 from mentionTriggers import mention_triggers
 
 def message_triggers(bot):
