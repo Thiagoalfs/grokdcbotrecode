@@ -1,6 +1,5 @@
 import re, random
 from mentionTriggers import mention_triggers
-from hiddenMessageTriggers import hidden_message_triggers
 
 def message_triggers(bot):
     @bot.event
@@ -14,8 +13,8 @@ def message_triggers(bot):
         
         await bot.process_commands(message)
             
-        await mention_triggers(bot, message)
-        await hidden_message_triggers(bot, message)
+        if await mention_triggers(bot, message):
+            return
 
         if bot.user not in message.mentions:
             
