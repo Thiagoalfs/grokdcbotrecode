@@ -1,0 +1,5 @@
+.env
+bot/hiddenMessageTriggers.py
+/bot/src
+/bot/__pycache__
+/bot/commands/__pycache__
