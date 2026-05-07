@@ -6,7 +6,6 @@ from commands.songs.stop import setup_stop_command
 from commands.songs.nowplaying import setup_nowplaying_command
 
 def setup_commands(bot):
-    # Centraliza o registro de todos os módulos de comando
     setup_vc_commands(bot)
     setup_songs_commands(bot)
     setup_skip_command(bot)

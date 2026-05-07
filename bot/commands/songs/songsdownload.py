@@ -11,6 +11,7 @@ def setup_songs_commands(bot):
         ydl_opts = {
             'noplaylist': True,
             'concurrent_fragment_downloads': 2,
+            'ratelimit': 3145728, # Limite de 3MiB/s
             'nocheckcertificate': True,
             'default_search': 'ytsearch', # Permite pesquisar por nome se não for link
             'extractor_args': {

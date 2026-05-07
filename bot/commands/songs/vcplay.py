@@ -68,6 +68,8 @@ def setup_vc_commands(bot):
         ydl_opts = {
             'noplaylist': False,
             'concurrent_fragment_downloads': 2,
+            'extract_flat': 'in_playlist', # Extração preguiçosa para não travar baixando metadados de tudo
+            'ratelimit': 3145728, # Limite de 3MiB/s para não engasgar a call
             'nocheckcertificate': True,
             'default_search': 'ytsearch', # Permite pesquisar por nome se não for link
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -95,38 +97,49 @@ def setup_vc_commands(bot):
             if 'entries' in info:
                 # É uma playlist ou resultado de busca múltipla
                 entries = list(info['entries'])
-                await msg_loading.edit(content=f"Playlist detectada! Processando {len(entries)} músicas...")
+                total_musicas = len(entries)
+                await msg_loading.edit(content=f"Playlist detectada! Processando a primeira de {total_musicas} músicas...")
                 
                 # Baixa e toca a primeira música imediatamente
                 first = entries.pop(0)
-                arquivo_primeira = await download_single_song(first, ydl_opts)
-                final_primeira = arquivo_primeira
-                titulo_primeira = first.get('title') or os.path.basename(final_primeira).replace(".mp3", "")
-                duracao_primeira = first.get('duration', 0)
-                thumb_primeira = first.get('thumbnail', "")
-                song_data = {'title': titulo_primeira, 'file': final_primeira, 'duration': duracao_primeira, 'thumbnail': thumb_primeira}
-                
-                if vc.is_playing() or song_queues[ctx.guild.id]['current']:
-                    song_queues[ctx.guild.id]['queue'].append(song_data)
-                    await ctx.send(f"Adicionado à fila: **{titulo_primeira}**")
-                else:
-                    song_queues[ctx.guild.id]['current'] = song_data
-                    song_data['start_time'] = bot.loop.time()
-                    def after_p(e):
-                        bot.loop.create_task(safe_delete(final_primeira))
-                        bot.loop.create_task(play_next(ctx))
-                    vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
-                    await ctx.send(f"Tocando agora: **{titulo_primeira}**")
+                try:
+                    song_info = await download_single_song(first, ydl_opts)
+                    final_primeira = song_info['filepath']
+                    titulo_primeira = song_info.get('title') or os.path.basename(final_primeira).replace(".mp3", "")
+                    duracao_primeira = song_info.get('duration', 0)
+                    thumb_primeira = song_info.get('thumbnail', "")
+                    song_data = {'title': titulo_primeira, 'file': final_primeira, 'duration': duracao_primeira, 'thumbnail': thumb_primeira}
+                    
+                    if vc.is_playing() or song_queues[ctx.guild.id]['current']:
+                        song_queues[ctx.guild.id]['queue'].append(song_data)
+                        await ctx.send(f"Adicionado à fila: **{titulo_primeira}**")
+                    else:
+                        song_queues[ctx.guild.id]['current'] = song_data
+                        song_data['start_time'] = bot.loop.time()
+                        def after_p(e):
+                            bot.loop.create_task(safe_delete(final_primeira))
+                            bot.loop.create_task(play_next(ctx))
+                        vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
+                        await ctx.send(f"Tocando agora: **{titulo_primeira}**")
+                except Exception as e:
+                    await ctx.send(f"Erro ao processar a primeira música da playlist: {e}")
 
                 # O restante baixa em segundo plano
                 async def bg_download(remaining_entries):
                     for entry in remaining_entries:
+                        # Verifica se o bot ainda está no servidor/fila existe
+                        if ctx.guild.id not in song_queues:
+                            break
                         try:
-                            f = await download_single_song(entry, ydl_opts)
-                            p = f
-                            t = entry.get('title') or os.path.basename(p).replace(".mp3", "")
-                            d = entry.get('duration', 0)
-                            th = entry.get('thumbnail', "")
+                            song_info = await download_single_song(entry, ydl_opts)
+                            p = song_info['filepath']
+                            # Se f for None ou algo deu errado no download, pula
+                            if not p or not os.path.exists(p):
+                                continue
+                                
+                            t = song_info.get('title') or os.path.basename(p).replace(".mp3", "").replace(".NA", "")
+                            d = song_info.get('duration', 0)
+                            th = song_info.get('thumbnail', "")
                             song_queues[ctx.guild.id]['queue'].append({'title': t, 'file': p, 'duration': d, 'thumbnail': th})
                         except: pass
                 

@@ -32,10 +32,12 @@ async def extract_info(url, ydl_opts):
 async def ytdlp(videourl, ydl_opts):
     folder = SONGS_FOLDER
     os.makedirs(folder, exist_ok=True)
-    ydl_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
+    download_opts = ydl_opts.copy()
+    download_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
+    download_opts.pop('extract_flat', None) # Garante que aqui ele pegue os dados reais
     loop = asyncio.get_event_loop()
     def _run():
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(download_opts) as ydl:
             info = ydl.extract_info(videourl, download=True)
             
             # Se for um resultado de busca, os dados do download estão na primeira entrada
@@ -48,7 +50,7 @@ async def ytdlp(videourl, ydl_opts):
             
             # Fallback: reconstrói o nome e corrige a extensão se houver conversão para mp3
             filename = ydl.prepare_filename(info)
-            if any(pp.get('key') == 'FFmpegExtractAudio' for pp in ydl_opts.get('postprocessors', [])):
+            if any(pp.get('key') == 'FFmpegExtractAudio' for pp in download_opts.get('postprocessors', [])):
                 filename = os.path.splitext(filename)[0] + ".mp3"
             return filename
     return await loop.run_in_executor(None, _run)
@@ -60,6 +62,7 @@ async def download_single_song(info_dict, ydl_opts):
     # Ensure 'outtmpl' is set for the download
     download_ydl_opts = ydl_opts.copy()
     download_ydl_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
+    download_ydl_opts.pop('extract_flat', None) # Queremos info completa aqui
     # Ensure no playlist processing for single download
     download_ydl_opts['noplaylist'] = True
 
@@ -67,15 +70,21 @@ async def download_single_song(info_dict, ydl_opts):
     def _run():
         with yt_dlp.YoutubeDL(download_ydl_opts) as ydl:
             # Baixa e retorna a info atualizada (que contém o filepath após o download)
-            info = ydl.extract_info(info_dict['webpage_url'], download=True)
+            url = info_dict.get('webpage_url') or info_dict.get('url')
+            info = ydl.extract_info(url, download=True)
+
+            if 'entries' in info and info['entries']:
+                info = info['entries'][0]
             
             if 'filepath' in info:
-                return info['filepath']
+                pass
+            else:
+                filename = ydl.prepare_filename(info)
+                if any(pp.get('key') == 'FFmpegExtractAudio' for pp in download_ydl_opts.get('postprocessors', [])):
+                    filename = os.path.splitext(filename)[0] + ".mp3"
+                info['filepath'] = filename
             
-            filename = ydl.prepare_filename(info)
-            if any(pp.get('key') == 'FFmpegExtractAudio' for pp in download_ydl_opts.get('postprocessors', [])):
-                filename = os.path.splitext(filename)[0] + ".mp3"
-            return filename
+            return info # Agora retorna o dicionário completo com metadados e caminho
     return await loop.run_in_executor(None, _run)
 
 async def upload_to_catbox(file_path):

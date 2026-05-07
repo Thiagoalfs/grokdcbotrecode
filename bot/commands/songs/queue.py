@@ -16,7 +16,7 @@ class QueueView(View):
             index = (self.current_page * 5) + i + 1
             description += f"`{index}.` {song['title']}\n"
 
-        embed = discord.Embed(title="📜 Fila de Músicas", description=description, color=discord.Color.green())
+        embed = discord.Embed(title="📜 Fila de Músicas", description=description, color=discord.Color.blue())
         embed.set_footer(text=f"Página {self.current_page + 1} de {len(self.pages)}")
         return embed
 
