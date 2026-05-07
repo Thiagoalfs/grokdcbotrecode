@@ -1,5 +1,8 @@
 .env
 bot/hiddenMessageTriggers.py
-/bot/src
 /bot/__pycache__
 /bot/commands/__pycache__
+/bot/src/badWordResponses.json
+/bot/src/badWords.json
+.vscode/settings.json
+/bot/commands/songs/__pycache__

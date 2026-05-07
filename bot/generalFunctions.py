@@ -1,4 +1,7 @@
 import discord, random, yt_dlp, asyncio, os, aiohttp
+
+SONGS_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "songs")
+
 def respostas():
     dado = ["sim", "não", "talvez"]
     valor = random.randint(0, (len(dado)-1))
@@ -18,16 +21,62 @@ def convert_mp3_ytdlp(ydl_opts):
         }],
     })
 
-async def ytdlp(videourl, ydl_opts):
-    folder = "songs"
-    os.makedirs(folder, exist_ok=True)
+async def extract_info(url, ydl_opts):
+    """Extracts information about a video or playlist without downloading."""
+    loop = asyncio.get_event_loop()
+    def _run():
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            return ydl.extract_info(url, download=False)
+    return await loop.run_in_executor(None, _run)
 
+async def ytdlp(videourl, ydl_opts):
+    folder = SONGS_FOLDER
+    os.makedirs(folder, exist_ok=True)
     ydl_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
+    loop = asyncio.get_event_loop()
+    def _run():
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(videourl, download=True)
+            
+            # Se for um resultado de busca, os dados do download estão na primeira entrada
+            if 'entries' in info and info['entries']:
+                info = info['entries'][0]
+
+            # Prioriza o caminho real do arquivo gerado pelo yt-dlp
+            if 'filepath' in info:
+                return info['filepath']
+            
+            # Fallback: reconstrói o nome e corrige a extensão se houver conversão para mp3
+            filename = ydl.prepare_filename(info)
+            if any(pp.get('key') == 'FFmpegExtractAudio' for pp in ydl_opts.get('postprocessors', [])):
+                filename = os.path.splitext(filename)[0] + ".mp3"
+            return filename
+    return await loop.run_in_executor(None, _run)
+
+async def download_single_song(info_dict, ydl_opts):
+    """Downloads a single song given its info dictionary."""
+    folder = SONGS_FOLDER
+    os.makedirs(folder, exist_ok=True)
+    # Ensure 'outtmpl' is set for the download
+    download_ydl_opts = ydl_opts.copy()
+    download_ydl_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
+    # Ensure no playlist processing for single download
+    download_ydl_opts['noplaylist'] = True
 
     loop = asyncio.get_event_loop()
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=True))
-        return ydl.prepare_filename(info)
+    def _run():
+        with yt_dlp.YoutubeDL(download_ydl_opts) as ydl:
+            # Baixa e retorna a info atualizada (que contém o filepath após o download)
+            info = ydl.extract_info(info_dict['webpage_url'], download=True)
+            
+            if 'filepath' in info:
+                return info['filepath']
+            
+            filename = ydl.prepare_filename(info)
+            if any(pp.get('key') == 'FFmpegExtractAudio' for pp in download_ydl_opts.get('postprocessors', [])):
+                filename = os.path.splitext(filename)[0] + ".mp3"
+            return filename
+    return await loop.run_in_executor(None, _run)
 
 async def upload_to_catbox(file_path):
     url = "https://catbox.moe/user/api.php"

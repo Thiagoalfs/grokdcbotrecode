@@ -1,0 +1,161 @@
+import discord
+import nacl
+print("PyNaCl OK:", nacl.__version__)
+import os
+import asyncio, yt_dlp
+from generalFunctions import extract_info, download_single_song, convert_mp3_ytdlp, ytdlp
+
+# Dicionário global para gerenciar a fila e o estado de cada servidor
+# Estrutura: { guild_id: { 'queue': [], 'current': None } }
+song_queues = {}
+
+def setup_vc_commands(bot):
+    async def safe_delete(file_path):
+        """Tenta deletar o arquivo após um delay para o Windows liberar o handle do FFmpeg."""
+        await asyncio.sleep(2)
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Erro ao deletar arquivo temporário {file_path}: {e}")
+
+    async def play_next(ctx):
+        guild_id = ctx.guild.id
+        if ctx.guild.id not in song_queues or not song_queues[ctx.guild.id]['queue']:
+            song_queues[ctx.guild.id]['current'] = None
+            return
+
+        # Pega a próxima música da fila
+        next_song = song_queues[ctx.guild.id]['queue'].pop(0)
+        song_queues[ctx.guild.id]['current'] = next_song
+        next_song['start_time'] = bot.loop.time()
+
+        def after_playing(error):
+            bot.loop.create_task(safe_delete(next_song['file']))
+            # Chama a próxima música
+            bot.loop.create_task(play_next(ctx))
+
+        vc = ctx.voice_client
+        # Ensure vc is still connected before trying to play
+        if vc:
+            vc.play(discord.FFmpegPCMAudio(next_song['file']), after=after_playing)
+            await ctx.send(f"Tocando agora: **{next_song['title']}**")
+
+    @bot.command(name="play", aliases=["p"])
+    async def play(ctx, *, url: str = None):
+        if not url:
+            await ctx.send("Manda o link ou o nome da música aí, ze. Sintaxe: !play <link/nome>")
+            return
+
+        voice_state = ctx.author.voice
+        if not voice_state:
+            await ctx.send("Entra num canal de voz primeiro, animal.")
+            return
+
+        channel = voice_state.channel
+        
+        # Lógica de join refatorada para evitar travamentos (Timeout e Reconnect)
+        try:
+            if ctx.voice_client:
+                if ctx.voice_client.channel.id != channel.id:
+                    await ctx.voice_client.move_to(channel)
+                vc = ctx.voice_client
+            else:
+                vc = await channel.connect(timeout=20.0, reconnect=True)
+        except Exception as e:
+            return await ctx.send(f"Deu ruim pra entrar na call, o 'DAVEY' barrou: {e}")
+
+        ydl_opts = {
+            'noplaylist': False,
+            'concurrent_fragment_downloads': 2,
+            'nocheckcertificate': True,
+            'default_search': 'ytsearch', # Permite pesquisar por nome se não for link
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'extractor_args': {
+                'youtube': {
+                    'remote_components': 'ejs:github', 
+                    'player_client': ['ios', 'web', 'android'],
+                }
+            }
+        }
+
+        # Configura para áudio/mp3
+        convert_mp3_ytdlp(ydl_opts)
+        
+        msg_loading = await ctx.send("Processando a braba, aguenta aí...")
+
+        try:
+            # Inicializa a fila do servidor se não existir
+            if ctx.guild.id not in song_queues:
+                song_queues[ctx.guild.id] = {'queue': [], 'current': None}
+
+            # Extrai informações primeiro para ver se é playlist ou música única
+            info = await extract_info(url, ydl_opts)
+            
+            if 'entries' in info:
+                # É uma playlist ou resultado de busca múltipla
+                entries = list(info['entries'])
+                await msg_loading.edit(content=f"Playlist detectada! Processando {len(entries)} músicas...")
+                
+                # Baixa e toca a primeira música imediatamente
+                first = entries.pop(0)
+                arquivo_primeira = await download_single_song(first, ydl_opts)
+                final_primeira = arquivo_primeira
+                titulo_primeira = first.get('title') or os.path.basename(final_primeira).replace(".mp3", "")
+                duracao_primeira = first.get('duration', 0)
+                thumb_primeira = first.get('thumbnail', "")
+                song_data = {'title': titulo_primeira, 'file': final_primeira, 'duration': duracao_primeira, 'thumbnail': thumb_primeira}
+                
+                if vc.is_playing() or song_queues[ctx.guild.id]['current']:
+                    song_queues[ctx.guild.id]['queue'].append(song_data)
+                    await ctx.send(f"Adicionado à fila: **{titulo_primeira}**")
+                else:
+                    song_queues[ctx.guild.id]['current'] = song_data
+                    song_data['start_time'] = bot.loop.time()
+                    def after_p(e):
+                        bot.loop.create_task(safe_delete(final_primeira))
+                        bot.loop.create_task(play_next(ctx))
+                    vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
+                    await ctx.send(f"Tocando agora: **{titulo_primeira}**")
+
+                # O restante baixa em segundo plano
+                async def bg_download(remaining_entries):
+                    for entry in remaining_entries:
+                        try:
+                            f = await download_single_song(entry, ydl_opts)
+                            p = f
+                            t = entry.get('title') or os.path.basename(p).replace(".mp3", "")
+                            d = entry.get('duration', 0)
+                            th = entry.get('thumbnail', "")
+                            song_queues[ctx.guild.id]['queue'].append({'title': t, 'file': p, 'duration': d, 'thumbnail': th})
+                        except: pass
+                
+                bot.loop.create_task(bg_download(entries))
+                await msg_loading.delete()
+            else:
+                # Música única
+                nome_arquivo = await ytdlp(url, ydl_opts)
+                nome_final = nome_arquivo
+                titulo = info.get('title') or os.path.basename(nome_final).replace(".mp3", "")
+                duracao = info.get('duration', 0)
+                thumb = info.get('thumbnail', "")
+                song_data = {'title': titulo, 'file': nome_final, 'duration': duracao, 'thumbnail': thumb}
+
+                await msg_loading.delete()
+                
+                if vc.is_playing():
+                    song_queues[ctx.guild.id]['queue'].append(song_data)
+                    await ctx.send(f"Adicionado à fila: **{titulo}**")
+                else:
+                    song_queues[ctx.guild.id]['current'] = song_data
+                    song_data['start_time'] = bot.loop.time()
+                    def after_playing(error):
+                        bot.loop.create_task(safe_delete(nome_final))
+                        bot.loop.create_task(play_next(ctx))
+                    vc.play(discord.FFmpegPCMAudio(nome_final), after=after_playing)
+                    await ctx.send(f"Tocando agora: **{titulo}**")
+
+        except Exception as e:
+            await ctx.send(f"Deu erro ao processar a música: {e}")
+            if 'nome_final' in locals() and os.path.exists(nome_final):
+                os.remove(nome_final)
