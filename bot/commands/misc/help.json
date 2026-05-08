@@ -113,19 +113,19 @@
             "descricao": ["Gera uma build aleatória de LoL (Campeão, Rota, Feitiços e Itens)"],
             "sintaxe": ["lolgen"]
         },
-        "linkleague": {
+        "leaguelink": {
             "icon": ["🎲"],
             "categoria": ["Fun"],
-            "nome": ["Comando linkleague"],
-            "aliases": ["vincularlol"],
+            "nome": ["Comando leaguelink"],
+            "aliases": ["vincularlol", "linkleague", "lollink", "linklol"],
             "descricao": ["Vincula sua conta do LoL ao bot (Nome#TAG)"],
-            "sintaxe": ["linkleague <Nome#TAG>"]
+            "sintaxe": ["leaguelink <Nome#TAG>"]
         },
         "leagueinfo": {
             "icon": ["🎲"],
             "categoria": ["Fun"],
             "nome": ["Comando leagueinfo"],
-            "aliases": ["lolstats"],
+            "aliases": ["lolstats", "lolprofile", "leagueprofile"],
             "descricao": ["Mostra elo e maestria de um usuário vinculado"],
             "sintaxe": ["leagueinfo [@user]"]
         }

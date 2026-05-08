@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 from urllib.parse import quote
-from riot_api_utils import fetch_riot_api
+from commands.fun.leagueoflegends.riot_api_utils import fetch_riot_api
 
 def setup_league_info_command(bot):
     @bot.command(name="leagueinfo", aliases=["lolstats"])
@@ -69,7 +69,7 @@ def setup_league_info_command(bot):
                                 champ_img = f"https://ddragon.leagueoflegends.com/cdn/img/champion/loading/{c_name}_0.jpg"
                                 break
 
-        embed = discord.Embed(title=f"📊 Perfil de League: {riot_id}", color=discord.Color.blue())
+        embed = discord.Embed(title=f"📊 {riot_id}", color=discord.Color.blue())
         if ctx.guild.icon:
             embed.set_author(name=ctx.guild.name, icon_url=ctx.guild.icon.url)
             
