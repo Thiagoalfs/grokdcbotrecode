@@ -1,5 +1,4 @@
 .env
-bot/hiddenMessageTriggers.py
 /bot/__pycache__
 /bot/commands/__pycache__
 /bot/src/badWordResponses.json
@@ -10,3 +9,5 @@ bot/hiddenMessageTriggers.py
 /bot/commands/misc/__pycache__
 /bot/commands/server/__pycache__
 /bot/commands/user/__pycache__
+/bot/tempCodeRunnerFile.py
+/bot/hiddentriggers

@@ -17,7 +17,7 @@ def help(bot):
             embed.set_thumbnail(url=ctx.guild.icon.url)
             embed.add_field(name="🎶 Músicas", value="play\nstop\nskip\nqueue\nnowplaying\nbaixe", inline=True)
             embed.add_field(name="👤 User", value="avatar\nuserinfo", inline=True)
-            embed.add_field(name="📌 Misc", value="ping", inline=True)
+            embed.add_field(name="📌 Misc", value="ping\ncoinflip", inline=True)
             embed.add_field(name="🪄 Server", value="servericon\nserverinfo", inline=True)
             embed.set_footer(text="Use .help <comando> para detalhes")
             return await ctx.send(embed=embed)

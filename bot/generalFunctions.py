@@ -3,13 +3,9 @@ import discord, random, yt_dlp, asyncio, os, aiohttp
 BASE_DOWNLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloadedsongs")
 
 def respostas():
-    dado = ["sim", "não", "talvez"]
-    valor = random.randint(0, (len(dado)-1))
-    easter_egg = random.randint(0, 100)
-    if easter_egg == 100:
+    if random.random() < 0.01:
         return "smt"
-    else:
-        return dado[valor]
+    return random.choice(["sim", "não", "talvez"])
     
 def convert_mp3_ytdlp(ydl_opts):
     ydl_opts.update({

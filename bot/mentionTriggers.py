@@ -1,9 +1,18 @@
 import re, discord
 from generalFunctions import respostas, ytdlp
+
+try:
+    from hiddentriggers.hiddenMentionTriggers import hidden_mention_triggers
+except (ImportError, ModuleNotFoundError):
+    hidden_mention_triggers = None
+
 async def mention_triggers(bot, message):
     if bot.user in message.mentions:
+
+        if hidden_mention_triggers and await hidden_mention_triggers(bot, message):
+            return True
     
-        if message.content == "<@1312115157589037066>":
+        elif message.content in (f"<@{bot.user.id}>", f"<@!{bot.user.id}>"):
             await message.channel.send("oi fi po fala")
             return True
         
@@ -15,10 +24,6 @@ async def mention_triggers(bot, message):
                 await message.channel.send("marca só um ai pit. o salve é só pra um de cada vez", reference=message)
             else:
                 await message.channel.send("um salve ai pro meu mano " + message.mentions[0].mention)
-            return True
-        
-        elif re.search(r'(?<!\w)(smt|se mata)(?!\w)', message.content.lower()):
-            await message.channel.send("se mata tu ze oxi", reference=message)
             return True
 
         else:

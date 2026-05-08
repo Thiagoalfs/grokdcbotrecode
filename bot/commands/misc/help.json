@@ -68,6 +68,14 @@
             "aliases": ["Nenhum"],
             "descricao": ["Mostra a latência do bot"],
             "sintaxe": [".ping"]
+        },
+        "coinflip": {
+            "icon": ["📌"],
+            "categoria": ["Miscelâneas"],
+            "nome": ["Comando .coinflip"],
+            "aliases": [".coin"],
+            "descricao": ["Joga cara ou coroa"],
+            "sintaxe": [".coinflip"]
         }
     },
     "server": {
