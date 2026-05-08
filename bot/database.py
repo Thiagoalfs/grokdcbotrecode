@@ -27,6 +27,14 @@ class Database:
             )
         """)
 
+        # Tabela de League of Legends (Global)
+        await self.execute("""
+            CREATE TABLE IF NOT EXISTS leagueconfig (
+                user_id BIGINT PRIMARY KEY,
+                riot_id VARCHAR(100) NOT NULL
+            )
+        """)
+
     async def execute(self, query, params=None):
         """Executa comandos como INSERT, UPDATE, DELETE."""
         async with self.pool.acquire() as conn:

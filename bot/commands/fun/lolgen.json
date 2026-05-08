@@ -15,19 +15,26 @@
         "Smolder", "Sona", "Soraka", "Swain", "Sylas", "Syndra", "Tahm Kench", "Taliyah", "Talon", "Taric", "Teemo", 
         "Thresh", "Tristana", "Trundle", "Tryndamere", "Twisted Fate", "Twitch", "Udyr", "Urgot", "Varus", "Vayne", 
         "Veigar", "Vel'Koz", "Vex", "Vi", "Viego", "Viktor", "Vladimir", "Volibear", "Warwick", "Wukong", "Xayah", 
-        "Xerath", "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Zeri", "Ziggs", "Zilean", "Zoe", "Zyra", "Aurora", "Ambessa"
+        "Xerath", "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Zeri", "Ziggs", "Zilean", "Zoe", "Zyra", "Aurora", "Ambessa", "Yunara", "Zaahen", "Mel"
     ],
     "roles": ["Topo", "Selva", "Meio", "Atirador", "Suporte"],
     "summoners": ["Flash", "Incendiar", "Teleporte", "Golpear", "Curar", "Barreira", "Exaustão", "Fantasma", "Purificar"],
-    "boots": ["Grevas do Berserker", "Botas Ionianas da Lucidez", "Passos de Mercúrio", "Botas Galvanizadas", "Sapatos do Feiticeiro", "Botas da Rapidez", "Solas Simbióticas"],
+    "boots": ["Grevas do Berserker", "Botas Ionianas da Lucidez", "Passos de Mercúrio", "Botas Galvanizadas", "Sapatos do Feiticeiro", "Botas da Rapidez", "Grevas Vorazes"],
     "items": [
         "Gume do Infinito", "Força da Trindade", "Cutelo Negro", "Ampulheta de Zhonya", "Capuz da Morte de Rabadon", 
-        "Coração Congelado", "Semblante Espiritual", "Dança da Morte", "Quebradiço", "Hidra Raivosa", "Hidra Titânica", 
+        "Coração Congelado", "Semblante Espiritual", "Dança da Morte", "Quebracascos", "Quebrapassos", "Hidra Raivosa", "Hidra Titânica", 
         "Lembranças do Lorde Dominik", "Canhão Fumegante", "Furacão de Runaan", "Dente de Nashor", "Cetro de Cristal de Rylai", 
         "Angústia de Liandry", "Cajado do Vazio", "Colhedor de Essência", "Mandíbula de Malmortius", "Anjo Guardião", 
         "Sinal de Sterak", "Armadura de Espinhos", "Égide de Fogo Solar", "Força da Natureza", "Juramento do Cavaleiro", 
         "Convergência de Zeke", "Redenção", "Turíbulo Ardente", "Cajado Aquafluxo", "Limiar da Noite", 
         "Lâmina Fantasma de Youmuu", "A Coletora", "Arco Escudo Imortal", "Mata-Cráquens", "Espada do Rei Destruído", 
-        "Cajado do Arcanjo", "Manamune", "Eclipse", "Cria-fendas", "Explocinturão Hextec", "Céu Dividido", "Terminus", "Morellonomicon"
+        "Cajado do Arcanjo", "Manamune", "Eclipse", "Cria-fendas", "Explocinturão Hextec", "Céu Dividido", "Terminus", "Morellonomicon", "Véu da Banshee", "Armadura de Warmog", "Couraça do Defunto",
+        "Ladrão de Almas de Mejai", "Cimitarra Mercurial", "Escudo de Pedra Gárgula", "Máscara Abissal", "Perdição de Lich",
+        "Bênção de Mikael", "Renovador Pedra da Lua", "Aço de Coração", "Faca Cintilante de Navori", "Chama das Sombras",
+        "Battlesong de Shurelya", "Lança de Shojin", "Sedenta por Sangue", "Lâmina Estática", "Gume das Trevas",
+        "Crepúsculo de Draktharr", "Garra do Espreitador", "Rancor de Serylda", "Arco Axial", "Raiva de Guinsoo",
+        "Fim dos Nervos", "Foco do Horizonte", "Malignância", "Cajado das Eras", "Muramana", "Jak'Sho, O Proteico",
+        "Pedra de Kaenic", "Fazedor de Riftes", "Eco de Luden", "Dominação do Soberano", "Trenó do Solstício",
+        "Fardo Protoplástico", "Rito da Ruína", "Faca do Serpenteante", "Lembranças de Mortal", "Cetro de Cristal de Rylai"
     ]
 }

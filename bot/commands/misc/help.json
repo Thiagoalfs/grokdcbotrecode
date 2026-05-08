@@ -112,6 +112,22 @@
             "aliases": ["lol", "build"],
             "descricao": ["Gera uma build aleatória de LoL (Campeão, Rota, Feitiços e Itens)"],
             "sintaxe": ["lolgen"]
+        },
+        "linkleague": {
+            "icon": ["🎲"],
+            "categoria": ["Fun"],
+            "nome": ["Comando linkleague"],
+            "aliases": ["vincularlol"],
+            "descricao": ["Vincula sua conta do LoL ao bot (Nome#TAG)"],
+            "sintaxe": ["linkleague <Nome#TAG>"]
+        },
+        "leagueinfo": {
+            "icon": ["🎲"],
+            "categoria": ["Fun"],
+            "nome": ["Comando leagueinfo"],
+            "aliases": ["lolstats"],
+            "descricao": ["Mostra elo e maestria de um usuário vinculado"],
+            "sintaxe": ["leagueinfo [@user]"]
         }
     },
     "admin": {

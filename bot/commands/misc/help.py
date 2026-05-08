@@ -21,7 +21,7 @@ def help(bot):
             embed.add_field(name="👤 User", value="avatar\nuserinfo", inline=True)
             embed.add_field(name="📌 Misc", value="ping", inline=True)
             embed.add_field(name="🪄 Server", value="servericon\nserverinfo", inline=True)
-            embed.add_field(name="🎲 Fun", value="coinflip\nlolgen", inline=True)
+            embed.add_field(name="🎲 Fun", value="coinflip\nlolgen\nlinkleague\nleagueinfo", inline=True)
             
             if ctx.author.guild_permissions.administrator:
                 embed.add_field(name="⚙️ Admin", value="prefix\nclear\nban\nkick\nunban", inline=True)

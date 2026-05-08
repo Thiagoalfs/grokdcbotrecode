@@ -1,3 +1,4 @@
+from discord.ext import commands
 from commands.songs.songsdownload import setup_songs_commands
 from commands.songs.vcplay import setup_vc_commands
 from commands.songs.skip import setup_skip_command
@@ -12,6 +13,8 @@ from commands.server.servericon import server_icon
 from commands.server.serverinfo import server_info
 from commands.fun.coinflip import coin_flip
 from commands.fun.lolgen import setup_lolgen_command
+from commands.fun.league_link import setup_league_link_command
+from commands.fun.league_info import setup_league_info_command
 from commands.admin.prefix import setup_prefix_command
 from commands.admin.clear import setup_clear_command
 from commands.admin.ban import setup_ban_command
@@ -22,6 +25,11 @@ from commands.admin.unban import setup_unban_command
 
 
 def setup_commands(bot):
+
+    @bot.event
+    async def on_command_error(ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send(f"Esse comando não existe. Digite `{ctx.prefix}help` para ver a lista de comandos.", delete_after=5)
 
     #songs related commands
     setup_vc_commands(bot)
@@ -40,6 +48,8 @@ def setup_commands(bot):
     help(bot)
     coin_flip(bot)
     setup_lolgen_command(bot)
+    setup_league_link_command(bot)
+    setup_league_info_command(bot)
 
     #admin
     setup_prefix_command(bot)
