@@ -39,17 +39,17 @@ def setup_vc_commands(bot):
         # Ensure vc is still connected before trying to play
         if vc:
             vc.play(discord.FFmpegPCMAudio(next_song['file']), after=after_playing)
-            await ctx.send(f"Tocando agora: **{next_song['title']}**")
+            await ctx.send(f"tocando agora: **{next_song['title']}**")
 
     @bot.command(name="play", aliases=["p"])
     async def play(ctx, *, url: str = None):
         if not url:
-            await ctx.send("Manda o link ou o nome da música aí, ze. Sintaxe: !play <link/nome>")
+            await ctx.send("manda o link ou o nome da música aí, ze. Sintaxe: .play <link/nome>")
             return
 
         voice_state = ctx.author.voice
         if not voice_state:
-            await ctx.send("Entra num canal de voz primeiro, animal.")
+            await ctx.send("entra num canal de voz primeiro, animal.")
             return
 
         channel = voice_state.channel
@@ -65,13 +65,15 @@ def setup_vc_commands(bot):
         except Exception as e:
             return await ctx.send(f"Deu ruim pra entrar na call, o 'DAVEY' barrou: {e}")
 
+        vcsongs_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "downloadedsongs", str(ctx.guild.id), "vcsongs")
+
         ydl_opts = {
             'noplaylist': False,
             'concurrent_fragment_downloads': 2,
-            'extract_flat': 'in_playlist', # Extração preguiçosa para não travar baixando metadados de tudo
-            'ratelimit': 3145728, # Limite de 3MiB/s para não engasgar a call
+            'extract_flat': 'in_playlist', 
+            'ratelimit': 3145728, 
             'nocheckcertificate': True,
-            'default_search': 'ytsearch', # Permite pesquisar por nome se não for link
+            'default_search': 'ytsearch', 
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'extractor_args': {
                 'youtube': {
@@ -100,12 +102,12 @@ def setup_vc_commands(bot):
                     # É uma playlist ou resultado de busca múltipla
                     entries = list(info['entries'])
                     total_musicas = len(entries)
-                    msg_loading = await ctx.send(f"Playlist/Busca detectada para '{query}'! Processando {total_musicas} músicas...")
+                    msg_loading = await ctx.send(f"playlist detectada. carregando {total_musicas} músicas...")
                     
                     # Baixa e toca a primeira música imediatamente
                     first = entries.pop(0)
                     try:
-                        song_info = await download_single_song(first, ydl_opts)
+                        song_info = await download_single_song(first, ydl_opts, folder=vcsongs_path)
                         final_primeira = song_info['filepath']
                         titulo_primeira = song_info.get('title') or os.path.basename(final_primeira).replace(".mp3", "")
                         duracao_primeira = song_info.get('duration', 0)
@@ -114,7 +116,7 @@ def setup_vc_commands(bot):
                         
                         if vc.is_playing() or song_queues[ctx.guild.id]['current']:
                             song_queues[ctx.guild.id]['queue'].append(song_data)
-                            await ctx.send(f"Adicionado à fila: **{titulo_primeira}**")
+                            await ctx.send(f"adicionado à fila: **{titulo_primeira}**")
                         else:
                             song_queues[ctx.guild.id]['current'] = song_data
                             song_data['start_time'] = bot.loop.time()
@@ -122,7 +124,7 @@ def setup_vc_commands(bot):
                                 bot.loop.create_task(safe_delete(final_primeira))
                                 bot.loop.create_task(play_next(ctx))
                             vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
-                            await ctx.send(f"Tocando agora: **{titulo_primeira}**")
+                            await ctx.send(f"tocando agora: **{titulo_primeira}**")
                         
                         # Deleta a mensagem de carregamento da playlist
                         try:
@@ -138,7 +140,7 @@ def setup_vc_commands(bot):
                             if ctx.guild.id not in song_queues:
                                 break
                             try:
-                                song_info = await download_single_song(entry, ydl_opts)
+                                song_info = await download_single_song(entry, ydl_opts, folder=vcsongs_path)
                                 p = song_info['filepath']
                                 # Se p for None ou algo deu errado no download, pula
                                 if not p or not os.path.exists(p):
@@ -153,8 +155,8 @@ def setup_vc_commands(bot):
                     bot.loop.create_task(bg_download(entries))
                 else:
                     # Música única
-                    msg_loading = await ctx.send(f"Busca detectada para '{query}'! Processando...")
-                    nome_final = await ytdlp(query, ydl_opts)
+                    msg_loading = await ctx.send(f"carregando música...", reference=ctx.message)
+                    nome_final = await ytdlp(query, ydl_opts, folder=vcsongs_path)
                     titulo = info.get('title') or os.path.basename(nome_final).replace(".mp3", "")
                     duracao = info.get('duration', 0)
                     thumb = info.get('thumbnail', "")
@@ -162,7 +164,7 @@ def setup_vc_commands(bot):
                     
                     if vc.is_playing() or song_queues[ctx.guild.id]['current']:
                         song_queues[ctx.guild.id]['queue'].append(song_data)
-                        await ctx.send(f"Adicionado à fila: **{titulo}**")
+                        await ctx.send(f"adicionado à fila: **{titulo}**")
                     else:
                         song_queues[ctx.guild.id]['current'] = song_data
                         song_data['start_time'] = bot.loop.time()
@@ -170,7 +172,7 @@ def setup_vc_commands(bot):
                             bot.loop.create_task(safe_delete(nome_final))
                             bot.loop.create_task(play_next(ctx))
                         vc.play(discord.FFmpegPCMAudio(nome_final), after=after_playing)
-                        await ctx.send(f"Tocando agora: **{titulo}**")
+                        await ctx.send(f"tocando agora: **{titulo}**")
                     
                     # Deleta a mensagem de carregamento da busca única
                     try:

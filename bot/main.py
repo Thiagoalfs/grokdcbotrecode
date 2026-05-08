@@ -13,20 +13,19 @@ intents.members = True
 intents.presences = True
 intents.voice_states = True
 
-bot = commands.Bot(command_prefix="!", intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=".", intents=intents, case_insensitive=True, help_command=None)
 
 @bot.event
 async def on_ready():
     print(f"Loguei como {bot.user}")
-    # Limpa a pasta 'songs' ao iniciar o bot
-    songs_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "songs")
+    downloads_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloadedsongs")
     try:
-        if os.path.exists(songs_folder):
-            shutil.rmtree(songs_folder)
-        os.makedirs(songs_folder)
-        print(f"Pasta '{songs_folder}' reiniciada com sucesso ao iniciar.")
+        if os.path.exists(downloads_folder):
+            shutil.rmtree(downloads_folder)
+        os.makedirs(downloads_folder)
+        print(f"Pasta '{downloads_folder}' reiniciada com sucesso ao iniciar.")
     except Exception as e:
-        print(f"Erro ao limpar a pasta '{songs_folder}' no on_ready: {e}")
+        print(f"Erro ao limpar a pasta de downloads no on_ready: {e}")
 
 setup_commands(bot)
 message_triggers(bot)

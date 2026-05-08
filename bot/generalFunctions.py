@@ -1,6 +1,6 @@
 import discord, random, yt_dlp, asyncio, os, aiohttp
 
-SONGS_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "songs")
+BASE_DOWNLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloadedsongs")
 
 def respostas():
     dado = ["sim", "não", "talvez"]
@@ -29,8 +29,8 @@ async def extract_info(url, ydl_opts):
             return ydl.extract_info(url, download=False)
     return await loop.run_in_executor(None, _run)
 
-async def ytdlp(videourl, ydl_opts):
-    folder = SONGS_FOLDER
+async def ytdlp(videourl, ydl_opts, folder=None):
+    folder = folder or BASE_DOWNLOAD_FOLDER
     os.makedirs(folder, exist_ok=True)
     download_opts = ydl_opts.copy()
     download_opts['outtmpl'] = f'{folder}/%(title)s.%(ext)s'
@@ -55,9 +55,9 @@ async def ytdlp(videourl, ydl_opts):
             return filename
     return await loop.run_in_executor(None, _run)
 
-async def download_single_song(info_dict, ydl_opts):
+async def download_single_song(info_dict, ydl_opts, folder=None):
     """Downloads a single song given its info dictionary."""
-    folder = SONGS_FOLDER
+    folder = folder or BASE_DOWNLOAD_FOLDER
     os.makedirs(folder, exist_ok=True)
     # Ensure 'outtmpl' is set for the download
     download_ydl_opts = ydl_opts.copy()

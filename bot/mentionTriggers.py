@@ -1,13 +1,9 @@
-import re, io, discord
+import re, discord
 from generalFunctions import respostas, ytdlp
-from hiddenMessageTriggers import hidden_message_triggers
 async def mention_triggers(bot, message):
     if bot.user in message.mentions:
-
-        if await hidden_message_triggers(bot, message):
-            return True
-        
-        elif message.content == "<@1312115157589037066>":
+    
+        if message.content == "<@1312115157589037066>":
             await message.channel.send("oi fi po fala")
             return True
         

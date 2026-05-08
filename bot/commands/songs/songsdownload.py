@@ -5,9 +5,11 @@ def setup_songs_commands(bot):
     @bot.command(name="baixe", aliases=["instale", "baixar"])
     async def baixe(ctx, formato: str = None, *, url: str = None):
         if not formato or not url:
-            await ctx.send("qual o link do que tu quer baixar? sintaxe: !baixe <mp3/mp4> <url>")
+            await ctx.send("qual o link do que tu quer baixar? sintaxe: .baixe <mp3/mp4> <url>")
             return
         
+        baixe_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "downloadedsongs", str(ctx.guild.id), "baixe")
+
         ydl_opts = {
             'noplaylist': True,
             'concurrent_fragment_downloads': 2,
@@ -27,12 +29,12 @@ def setup_songs_commands(bot):
             if "mp3" in formato.lower():
                 convert_mp3_ytdlp(ydl_opts)
                 await ctx.send("baixando e convertendo pra mp3, calma ai um cadin...")
-                nome_final = await ytdlp(url, ydl_opts) # ytdlp agora retorna o caminho final do .mp3 após a conversão
+                nome_final = await ytdlp(url, ydl_opts, folder=baixe_path) # ytdlp agora retorna o caminho final do .mp3 após a conversão
             
             elif "mp4" in formato.lower():
                 ydl_opts['format'] = 'bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=mp4]/bestaudio[ext=m4a]/best[ext=mp4]/best' # Prioriza MP4 em 1080p, depois 720p, com melhor áudio
                 await ctx.send("baixando o vídeo em mp4, aguenta ai...")
-                nome_arquivo = await ytdlp(url, ydl_opts)
+                nome_arquivo = await ytdlp(url, ydl_opts, folder=baixe_path)
                 nome_final = nome_arquivo
 
                 tamanho_bytes = os.path.getsize(nome_final)

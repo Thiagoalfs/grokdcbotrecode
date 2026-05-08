@@ -1,0 +1,91 @@
+{
+    "songs": {
+        "play": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando .play"],
+            "aliases": [".p"],
+            "descricao": ["Começa a tocar música na call. aceita links e nomes de músicas. é possível enviar mais de uma música dividindo por vírgulas no comando"],
+            "sintaxe": [".play <link/nome> "]
+        },
+        "skip": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando .skip"],
+            "aliases": [".s, .pular"],
+            "descricao": ["Pula a música atual"],
+            "sintaxe": [".skip"]
+        },
+        "stop": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando .stop"],
+            "aliases": [".parar, .sair"],
+            "descricao": ["Para de tocar músicas e sai da call"],
+            "sintaxe": [".stop"]
+        },
+        "nowplaying": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando .nowplaying"],
+            "aliases": [".np"],
+            "descricao": ["Mostra a música atual"],
+            "sintaxe": [".nowplaying"]
+        },
+        "queue": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando .queue"],
+            "aliases": [".q"],
+            "descricao": ["Mostra a fila de músicas"],
+            "sintaxe": [".queue"]
+        }
+    },
+    "user": {
+        "avatar": {
+            "icon": ["👤"],
+            "categoria": ["Usuário"],
+            "nome": ["Comando .avatar"],
+            "aliases": [".useravatar"],
+            "descricao": ["Mostra o avatar do usuário"],
+            "sintaxe": [".avatar"]
+        },
+        "userinfo": {
+            "icon": ["👤"],
+            "categoria": ["Usuário"],
+            "nome": ["Comando .userinfo"],
+            "aliases": [".user"],
+            "descricao": ["Mostra informações do usuário"],
+            "sintaxe": [".userinfo"]
+        }
+
+    },
+    "misc": {
+        "ping": {
+            "icon": ["📌"],
+            "categoria": ["Miscelâneas"],
+            "nome": ["Comando .ping"],
+            "aliases": ["Nenhum"],
+            "descricao": ["Mostra a latência do bot"],
+            "sintaxe": [".ping"]
+        }
+    },
+    "server": {
+        "serverinfo": {
+            "icon": ["🪄"],
+            "categoria": ["Server"],
+            "nome": ["Comando .serverinfo"],
+            "aliases": ["Nenhum"],
+            "descricao": ["Mostra informações do servidor"],
+            "sintaxe": [".serverinfo"]
+        },
+        "servericon":{
+            "icon": ["🪄"],
+            "categoria": ["Server"],
+            "nome": ["Comando .servericon"],
+            "aliases": ["Nenhum"],
+            "descricao": ["Mostra a foto do servidor"],
+            "sintaxe": [".servericon"]
+        }
+    }
+}

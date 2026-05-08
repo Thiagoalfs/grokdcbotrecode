@@ -44,8 +44,8 @@ def setup_queue_command(bot):
         if not state or not state['queue']:
             # Se tiver algo tocando mas a fila estiver vazia
             if state and state['current']:
-                return await ctx.send(f"Só tem **{state['current']['title']}** tocando. A fila tá vazia.")
-            return await ctx.send("A fila tá mais vazia que meu bolso, ze.")
+                return await ctx.send("a fila tá vazia")
+            return await ctx.send("a fila tá mais vazia que meu bolso ze")
 
         queue_list = state['queue']
         

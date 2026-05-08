@@ -1,5 +1,4 @@
 import discord
-import asyncio
 from commands.songs.vcplay import song_queues
 
 def setup_nowplaying_command(bot):

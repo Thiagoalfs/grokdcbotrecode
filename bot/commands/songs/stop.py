@@ -9,10 +9,10 @@ def setup_stop_command(bot):
         guild_id = ctx.guild.id
 
         if not ctx.voice_client:
-            return await ctx.send("Não estou em nenhum canal de voz, ze.")
+            return await ctx.send("não estou em nenhuma call ze")
 
         if not ctx.author.voice or ctx.author.voice.channel != ctx.voice_client.channel:
-            return await ctx.send("Entra na call pra me parar, engraçadinho.")
+            return await ctx.send("entra na call pra parar as músicas")
 
         # Stop current playback
         ctx.voice_client.stop()
@@ -22,14 +22,13 @@ def setup_stop_command(bot):
         if guild_id in song_queues:
             del song_queues[guild_id] # Remove the guild's entry entirely
 
-        # Deleta todos os arquivos e subpastas na pasta 'songs'
-        songs_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "songs")
+        # Deleta a pasta específica deste servidor dentro de 'downloadedsongs'
+        guild_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "downloadedsongs", str(guild_id))
         try:
-            if os.path.exists(songs_folder):
-                shutil.rmtree(songs_folder)
-            os.makedirs(songs_folder)
-            print(f"Pasta '{songs_folder}' reiniciada pelo comando !stop.")
+            if os.path.exists(guild_folder):
+                shutil.rmtree(guild_folder)
+            print(f"Pasta do servidor '{guild_id}' limpa pelo comando !stop.")
         except Exception as e:
-            print(f"Erro ao reiniciar a pasta '{songs_folder}' no !stop: {e}")
+            print(f"Erro ao limpar a pasta do servidor no !stop: {e}")
 
-        await ctx.send("Parei de tocar, saí da call e limpei a fila e a pasta de músicas. Até mais!")
+        await ctx.send("flw")
