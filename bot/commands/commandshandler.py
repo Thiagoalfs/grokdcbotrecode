@@ -10,7 +10,13 @@ from commands.misc.ping import ping
 from commands.misc.help import help
 from commands.server.servericon import server_icon
 from commands.server.serverinfo import server_info
-from commands.misc.coinflip import coin_flip
+from commands.fun.coinflip import coin_flip
+from commands.fun.lolgen import setup_lolgen_command
+from commands.admin.prefix import setup_prefix_command
+from commands.admin.clear import setup_clear_command
+from commands.admin.ban import setup_ban_command
+from commands.admin.kick import setup_kick_command
+from commands.admin.unban import setup_unban_command
 
 
 
@@ -33,7 +39,14 @@ def setup_commands(bot):
     ping(bot)
     help(bot)
     coin_flip(bot)
+    setup_lolgen_command(bot)
 
+    #admin
+    setup_prefix_command(bot)
+    setup_clear_command(bot)
+    setup_ban_command(bot)
+    setup_kick_command(bot)
+    setup_unban_command(bot)
 
     #server
     server_icon(bot)

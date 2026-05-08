@@ -14,12 +14,19 @@ def help(bot):
 
         if not command:
             embed = discord.Embed(title="🔎 Lista de Comandos", color=discord.Color.blue())
-            embed.set_thumbnail(url=ctx.guild.icon.url)
+            if ctx.guild.icon:
+                embed.set_thumbnail(url=ctx.guild.icon.url)
+                
             embed.add_field(name="🎶 Músicas", value="play\nstop\nskip\nqueue\nnowplaying\nbaixe", inline=True)
             embed.add_field(name="👤 User", value="avatar\nuserinfo", inline=True)
-            embed.add_field(name="📌 Misc", value="ping\ncoinflip", inline=True)
+            embed.add_field(name="📌 Misc", value="ping", inline=True)
             embed.add_field(name="🪄 Server", value="servericon\nserverinfo", inline=True)
-            embed.set_footer(text="Use .help <comando> para detalhes")
+            embed.add_field(name="🎲 Fun", value="coinflip\nlolgen", inline=True)
+            
+            if ctx.author.guild_permissions.administrator:
+                embed.add_field(name="⚙️ Admin", value="prefix\nclear\nban\nkick\nunban", inline=True)
+
+            embed.set_footer(text=f"Use {ctx.prefix}help <comando> para detalhes")
             return await ctx.send(embed=embed)
 
         if command:
@@ -34,11 +41,18 @@ def help(bot):
             
             if found_info:
                 embed = discord.Embed(title="".join(found_info["nome"]), color=discord.Color.blue())
-                embed.set_thumbnail(url=ctx.guild.icon.url)
+                if ctx.guild.icon:
+                    embed.set_thumbnail(url=ctx.guild.icon.url)
                 embed.set_author(name=f"{''.join(found_info['icon'])} {''.join(found_info['categoria'])}")
+                
+                # Formata os aliases com o prefixo atual, ignorando se for "Nenhum"
+                aliases_list = found_info["aliases"]
+                formatted_aliases = ", ".join([f"{ctx.prefix}{a}" for a in aliases_list]) if aliases_list[0] != "Nenhum" else "Nenhum"
+                
                 embed.add_field(name="📃 Descrição", value="".join(found_info["descricao"]), inline=False)
-                embed.add_field(name="🔗 Aliases", value=", ".join(found_info["aliases"]), inline=True)
-                embed.add_field(name="🔎 Sintaxe", value=f"`{''.join(found_info['sintaxe'])}`", inline=True)
+                embed.add_field(name="🔗 Aliases", value=formatted_aliases, inline=True)
+                embed.add_field(name="🔎 Sintaxe", value=f"`{ctx.prefix}{''.join(found_info['sintaxe'])}`", inline=True)
+                
                 await ctx.send(embed=embed)
             else:
-                await ctx.send(f"comando `{command}` não encontrado. use `.help` para ver a lista.")
+                await ctx.send(f"comando `{command}` não encontrado. use `{ctx.prefix}help` para ver a lista.")

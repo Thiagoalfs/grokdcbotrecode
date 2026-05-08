@@ -3,97 +3,157 @@
         "play": {
             "icon": ["🎶"],
             "categoria": ["Músicas"],
-            "nome": ["Comando .play"],
-            "aliases": [".p"],
+            "nome": ["Comando play"],
+            "aliases": ["p"],
             "descricao": ["Começa a tocar música na call. aceita links e nomes de músicas. é possível enviar mais de uma música dividindo por vírgulas no comando"],
-            "sintaxe": [".play <link/nome> "]
+            "sintaxe": ["play <link/nome> "]
         },
         "skip": {
             "icon": ["🎶"],
             "categoria": ["Músicas"],
-            "nome": ["Comando .skip"],
-            "aliases": [".s, .pular"],
+            "nome": ["Comando skip"],
+            "aliases": ["s", "pular"],
             "descricao": ["Pula a música atual"],
-            "sintaxe": [".skip"]
+            "sintaxe": ["skip"]
         },
         "stop": {
             "icon": ["🎶"],
             "categoria": ["Músicas"],
-            "nome": ["Comando .stop"],
-            "aliases": [".parar, .sair"],
+            "nome": ["Comando stop"],
+            "aliases": ["parar", "sair"],
             "descricao": ["Para de tocar músicas e sai da call"],
-            "sintaxe": [".stop"]
+            "sintaxe": ["stop"]
         },
         "nowplaying": {
             "icon": ["🎶"],
             "categoria": ["Músicas"],
-            "nome": ["Comando .nowplaying"],
-            "aliases": [".np"],
+            "nome": ["Comando nowplaying"],
+            "aliases": ["np"],
             "descricao": ["Mostra a música atual"],
-            "sintaxe": [".nowplaying"]
+            "sintaxe": ["nowplaying"]
         },
         "queue": {
             "icon": ["🎶"],
             "categoria": ["Músicas"],
-            "nome": ["Comando .queue"],
-            "aliases": [".q"],
+            "nome": ["Comando queue"],
+            "aliases": ["q"],
             "descricao": ["Mostra a fila de músicas"],
-            "sintaxe": [".queue"]
+            "sintaxe": ["queue"]
         }
     },
     "user": {
         "avatar": {
             "icon": ["👤"],
             "categoria": ["Usuário"],
-            "nome": ["Comando .avatar"],
-            "aliases": [".useravatar"],
+            "nome": ["Comando avatar"],
+            "aliases": ["useravatar"],
             "descricao": ["Mostra o avatar do usuário"],
-            "sintaxe": [".avatar"]
+            "sintaxe": ["avatar"]
         },
         "userinfo": {
             "icon": ["👤"],
             "categoria": ["Usuário"],
-            "nome": ["Comando .userinfo"],
-            "aliases": [".user"],
+            "nome": ["Comando userinfo"],
+            "aliases": ["user"],
             "descricao": ["Mostra informações do usuário"],
-            "sintaxe": [".userinfo"]
+            "sintaxe": ["userinfo"]
         }
 
     },
-    "misc": {
+    "etc": {
         "ping": {
             "icon": ["📌"],
             "categoria": ["Miscelâneas"],
-            "nome": ["Comando .ping"],
+            "nome": ["Comando ping"],
             "aliases": ["Nenhum"],
             "descricao": ["Mostra a latência do bot"],
-            "sintaxe": [".ping"]
+            "sintaxe": ["ping"]
         },
         "coinflip": {
             "icon": ["📌"],
             "categoria": ["Miscelâneas"],
-            "nome": ["Comando .coinflip"],
-            "aliases": [".coin"],
+            "nome": ["Comando coinflip"],
+            "aliases": ["coin"],
             "descricao": ["Joga cara ou coroa"],
-            "sintaxe": [".coinflip"]
+            "sintaxe": ["coinflip"]
         }
     },
     "server": {
         "serverinfo": {
             "icon": ["🪄"],
             "categoria": ["Server"],
-            "nome": ["Comando .serverinfo"],
+            "nome": ["Comando serverinfo"],
             "aliases": ["Nenhum"],
             "descricao": ["Mostra informações do servidor"],
-            "sintaxe": [".serverinfo"]
+            "sintaxe": ["serverinfo"]
         },
         "servericon":{
             "icon": ["🪄"],
             "categoria": ["Server"],
-            "nome": ["Comando .servericon"],
+            "nome": ["Comando servericon"],
             "aliases": ["Nenhum"],
             "descricao": ["Mostra a foto do servidor"],
-            "sintaxe": [".servericon"]
+            "sintaxe": ["servericon"]
+        }
+    },
+    "fun": {
+        "coinflip": {
+            "icon": ["🎲"],
+            "categoria": ["Fun"],
+            "nome": ["Comando coinflip"],
+            "aliases": ["coin"],
+            "descricao": ["Joga cara ou coroa"],
+            "sintaxe": ["coinflip"]
+        },
+        "lolgen": {
+            "icon": ["🎲"],
+            "categoria": ["Fun"],
+            "nome": ["Comando lolgen"],
+            "aliases": ["lol", "build"],
+            "descricao": ["Gera uma build aleatória de LoL (Campeão, Rota, Feitiços e Itens)"],
+            "sintaxe": ["lolgen"]
+        }
+    },
+    "admin": {
+        "prefix": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando prefix"],
+            "aliases": ["Nenhum"],
+            "descricao": ["Altera o prefixo do bot"],
+            "sintaxe": ["prefix <novo prefixo>"]
+        },
+        "clear": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando clear"],
+            "aliases": ["limpar"],
+            "descricao": ["Apaga uma quantidade específica de mensagens do canal atual (limite de 100)"],
+            "sintaxe": ["clear <quantidade>"]
+        },
+        "ban": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando ban"],
+            "aliases": ["banir"],
+            "descricao": ["Bane um membro do servidor."],
+            "sintaxe": ["ban <@membro> [razão]"]
+        },
+        "kick": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando kick"],
+            "aliases": ["expulsar"],
+            "descricao": ["Expulsa um membro do servidor."],
+            "sintaxe": ["kick <@membro> [razão]"]
+        },
+        "unban": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando unban"],
+            "aliases": ["desbanir"],
+            "descricao": ["Desbane um usuário do servidor usando seu ID."],
+            "sintaxe": ["unban <ID_do_usuário> [razão]"]
         }
     }
 }
