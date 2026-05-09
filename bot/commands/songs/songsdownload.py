@@ -3,7 +3,7 @@ from generalFunctions import ytdlp, convert_mp3_ytdlp, upload_to_catbox
 from commands.languageservice import languageservice
 
 def setup_songs_commands(bot):
-    @bot.command(name="baixe", aliases=["instale", "baixar"])
+    @bot.command(name="baixe", aliases=["instale", "baixar", "download"])
     async def baixe(ctx, formato: str = None, *, url: str = None):
         responses = await languageservice(bot, ctx, "songs", "songsdownload.json")
 

@@ -5,7 +5,7 @@ def setup_league_link_command(bot):
     @bot.command(name="leaguelink", aliases=["vincularlol", "linkleague", "lollink", "linklol"])
     async def linkleague(ctx, *, riot_id: str = None):
         """Vincula sua conta do LoL ao Discord (Formato: Nome#Tag)"""
-        responses = await languageservice(bot, ctx, "fun", "league_link.json")
+        responses = await languageservice(bot, ctx, "fun\league of legends", "league_link.json")
         if riot_id is None:
             data = await bot.db.fetch_one("SELECT riot_id FROM leagueconfig WHERE user_id = %s", (ctx.author.id,))
             if data:

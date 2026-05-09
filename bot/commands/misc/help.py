@@ -14,7 +14,7 @@ def help(bot):
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon.url)
                 
-            embed.add_field(name=ui["category_songs"], value="play\nstop\nskip\nqueue\nnowplaying\nbaixe", inline=True)
+            embed.add_field(name=ui["category_songs"], value="play\nstop\nskip\nqueue\nnowplaying\ndownload", inline=True)
             embed.add_field(name=ui["category_user"], value="avatar\nuserinfo", inline=True)
             embed.add_field(name=ui["category_misc"], value="ping", inline=True)
             embed.add_field(name=ui["category_server"], value="servericon\nserverinfo", inline=True)

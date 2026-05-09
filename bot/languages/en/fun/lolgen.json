@@ -1,0 +1,58 @@
+{
+    "champions": [
+        "Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe",
+        "Aurelion Sol", "Azir", "Bard", "Bel'Veth", "Blitzcrank", "Brand", "Braum", "Caitlyn", "Camille", "Cassiopeia",
+        "Cho'Gath", "Corki", "Darius", "Diana", "Dr. Mundo", "Draven", "Ekko", "Elise", "Evelynn", "Ezreal",
+        "Fiddlesticks", "Fiora", "Fizz", "Galio", "Gangplank", "Garen", "Gnar", "Gragas", "Graves", "Gwen",
+        "Hecarim", "Heimerdinger", "Illaoi", "Irelia", "Ivern", "Janna", "Jarvan IV", "Jax", "Jayce", "Jhin",
+        "Jinx", "Kai'Sa", "Kalista", "Karma", "Karthus", "Kassadin", "Katarina", "Kayle", "Kayn", "Kennen",
+        "Kha'Zix", "Kindred", "Kled", "Kog'Maw", "K'Sante", "LeBlanc", "Lee Sin", "Leona", "Lillia", "Lissandra",
+        "Lucian", "Lulu", "Lux", "Malphite", "Malzahar", "Maokai", "Master Yi", "Miss Fortune", "Mordekaiser", "Morgana",
+        "Naafiri", "Nami", "Nasus", "Nautilus", "Neeko", "Nidalee", "Nilah", "Nocturne", "Nunu & Willump", "Olaf",
+        "Orianna", "Ornn", "Pantheon", "Poppy", "Pyke", "Qiyana", "Quinn", "Rakan", "Rammus", "Rek'Sai",
+        "Rell", "Renata Glasc", "Renekton", "Rengar", "Riven", "Rumble", "Ryze", "Samira", "Sejuani", "Senna",
+        "Seraphine", "Sett", "Shaco", "Shen", "Shyvana", "Singed", "Sion", "Sivir", "Skarner", "Sona",
+        "Soraka", "Swain", "Sylas", "Syndra", "Tahm Kench", "Taliyah", "Talon", "Taric", "Teemo", "Thresh",
+        "Tristana", "Trundle", "Tryndamere", "Twisted Fate", "Twitch", "Udyr", "Urgot", "Varus", "Vayne", "Veigar",
+        "Vel'Koz", "Vex", "Vi", "Viego", "Viktor", "Vladimir", "Volibear", "Warwick", "Xayah", "Xerath",
+        "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Zeri", "Ziggs", "Zilean",
+        "Zoe", "Zyra"
+    ],
+    "roles": ["Top", "Jungle", "Mid", "ADC", "Support"],
+    "summoners": ["Flash", "Teleport", "Ignite", "Exhaust", "Heal", "Barrier", "Cleanse", "Ghost", "Smite"],
+    "boots": [
+        "Boots of Mobility", "Boots of Swiftness", "Ionian Boots of Lucidity", "Plated Steelcaps",
+        "Sorcerer's Shoes", "Mercury's Treads", "Berserker's Greaves"
+    ],
+    "items": [
+        "Youmuu's Ghostblade", "Eclipse", "Manamune", "Essence Reaver", "Trinity Force",
+        "Black Cleaver", "Goredrinker", "Hullbreaker", "Maw of Malmortius", "Guardian Angel",
+        "Phantom Dancer", "Infinity Edge", "Runaan's Hurricane", "Lord Dominik's Regards",
+        "Mercurial Scimitar", "Bloodthirster", "Kraken Slayer", "Immortal Shieldbow",
+        "Force of Nature", "Gargoyle Stoneplate", "Sunfire Aegis", "Frozen Heart",
+        "Thornmail", "Knight's Vow", "Zeke's Convergence",
+        "Locket of the Iron Solari", "Redemption", "Ardent Censer", "Staff of Flowing Water",
+        "Chemtech Putrifier", "Athene's Unholy Grail", "Rabadon's Deathcap", "Void Staff",
+        "Lich Bane", "Zhonya's Hourglass", "Morellonomicon", "Liandry's Anguish",
+        "Rylai's Crystal Scepter", "Demonic Embrace", "Nashor's Tooth",
+        "Archangel's Staff", "Rod of Ages", "Hextech Rocketbelt", "Everfrost",
+        "Abyssal Mask", "Iceborn Gauntlet", "Randuin's Omen",
+        "Spirit Visage", "Dead Man's Plate", "Edge of Night", "Sanguine Blade",
+        "Ravenous Hydra", "Titanic Hydra", "Sterak's Gage",
+        "Prowler's Claw", "Chemtech Chainsword", "Imperial Mandate", "Echoes of Helia",
+        "Statikk Shiv", "Guinsoo's Rageblade", "Terminus",
+        "Trailblazer", "Horizon Focus", "Crown of the Shattered Queen",
+        "World Atlas", "Hubris", "Voltaic Cyclosword"
+    ],
+    "messages": {
+        "challenge_title": "🎮 Build Challenge",
+        "champion_field": "👤 Champion",
+        "role_field": "🗺️ Role",
+        "summoners_field": "⚡ Summoner Spells",
+        "items_field": "⚔️ Items",
+        "footer_text": "Good luck on the Rift, {user_display_name}!",
+        "support_item_name": "Support Item",
+        "champion_not_found": "❌ Champion `{champion_input}` not found in my list.",
+        "error_loading_data": "Error loading League of Legends data."
+    }
+}

@@ -37,6 +37,14 @@
             "aliases": ["parar", "sair", "dc"],
             "descricao": ["Stops the music and leaves the channel."],
             "sintaxe": ["stop"]
+        },
+        "download": {
+            "icon": ["🎶"],
+            "categoria": ["Music"],
+            "nome": ["Download Command"],
+            "aliases": ["baixar", "baixe"],
+            "descricao": ["Downloads music or videos. Accepts links and names. If only the name is provided, it uses YouTube as default"],
+            "sintaxe": ["download <mp3/mp4> <link/name>"]
         }
     },
     "user": {

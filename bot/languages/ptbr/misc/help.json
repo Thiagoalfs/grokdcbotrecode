@@ -53,6 +53,14 @@
             "aliases": ["q"],
             "descricao": ["Mostra a fila de músicas"],
             "sintaxe": ["queue"]
+        },
+        "download": {
+            "icon": ["🎶"],
+            "categoria": ["Músicas"],
+            "nome": ["Comando download"],
+            "aliases": ["baixar, baixe"],
+            "descricao": ["Baixa músicas ou vídeos. Aceita links e nomes. Caso só o nome for fornecido, usa o YouTube como padrão"],
+            "sintaxe": ["download <mp3/mp4> <link/nome>"]
         }
     },
     "user": {
@@ -74,6 +82,7 @@
         }
 
     },
+
     "etc": {
         "ping": {
             "icon": ["📌"],
