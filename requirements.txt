@@ -1,2 +1,9 @@
-discord yt-dlp aiohttp python-dotenv aiomysql PyMySQL
+discord.py
+yt-dlp
+aiohttp
+python-dotenv
+aiomysql
+PyMySQL
+random
+re
 
