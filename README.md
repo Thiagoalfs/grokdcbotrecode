@@ -15,6 +15,9 @@ Yes, its name comes from the AI agent.
 ### Installation
 
 1. Clone the repository.
+    ```bash
+    git clone https://github.com/Thiagoalfs/grokdcbotrecode.git
+    ```
 2. Install the required Python packages:
    ```bash
    pip install -r requirements.txt
@@ -33,6 +36,9 @@ DB_PORT=3306
 DB_USER=your_database_user
 DB_PASS=your_database_password
 DB_NAME=your_database_name
+
+# League of Legends Profile Configuration
+RIOT_API_KEY=your_riot_api_key
 ```
 
 ### Database Setup
