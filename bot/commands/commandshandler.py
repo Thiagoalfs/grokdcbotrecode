@@ -12,7 +12,7 @@ from commands.misc.help import help
 from commands.server.servericon import server_icon
 from commands.server.serverinfo import server_info
 from commands.fun.coinflip import coin_flip
-from commands.fun.lolgen import setup_lolgen_command
+from commands.fun.leagueoflegends.lolgen import setup_lolgen_command
 from commands.fun.leagueoflegends.league_link import setup_league_link_command
 from commands.fun.leagueoflegends.league_info import setup_league_info_command
 from commands.admin.prefix import setup_prefix_command

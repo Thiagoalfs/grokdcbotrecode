@@ -18,10 +18,10 @@
         "Xerath", "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Zeri", "Ziggs", "Zilean", "Zoe", "Zyra", "Aurora", "Ambessa", "Yunara", "Zaahen", "Mel"
     ],
     "roles": ["Topo", "Selva", "Meio", "Atirador", "Suporte"],
-    "summoners": ["Flash", "Incendiar", "Teleporte", "Curar", "Barreira", "Exaustão", "Fantasma", "Purificar"],
+    "summoners": ["Flash", "Incendiar", "Teleporte", "Curar", "Barreira", "Exaustão", "Fantasma", "Purificar", "Golpear"],
     "boots": ["Grevas do Berserker", "Botas Ionianas da Lucidez", "Passos de Mercúrio", "Botas Galvanizadas", "Sapatos do Feiticeiro", "Botas da Rapidez", "Grevas Vorazes"],
     "items": [
-    "Força do Infinito",
+    "Gume do Infinito",
     "Capuz da Morte de Rabadon",
     "Sedenta por Sangue",
     "Força da Trindade",
@@ -132,5 +132,18 @@
     "Regenerador de Pedra Lunar",
     "Ecos de Hélia",
     "Ladrão de Almas de Mejai"
-    ]
+    ],
+
+    "messages": {
+    "challenge_title": "🎮 Desafio de Build",
+    "champion_field": "👤 Campeão",
+    "role_field": "🗺️ Rota",
+    "summoners_field": "⚡ Feitiços",
+    "items_field": "⚔️ Itens",
+    "footer_text": "Boa sorte no Rift, {user_display_name}!",
+    "support_item_name": "Item de Suporte",
+    "champion_not_found": "❌ Não encontrei o campeão `{champion_input}` na minha lista",
+    "error_loading_data": "Erro ao carregar os dados do League of Legends",
+    "error_loading_json_data": "Erro ao carregar os dados JSON do League of Legends"
+    }
 }

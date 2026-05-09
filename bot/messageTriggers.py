@@ -18,8 +18,7 @@ def message_triggers(bot):
         
         await bot.process_commands(message)
             
-        if await mention_triggers(bot, message):
-            return True
+        await mention_triggers(bot, message)
 
         if bot.user not in message.mentions:
 
