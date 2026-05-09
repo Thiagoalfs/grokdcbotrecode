@@ -19,6 +19,8 @@ class Database:
                 db=os.getenv("DB_NAME"),
                 autocommit=True, # Salva alterações automaticamente
                 cursorclass=aiomysql.DictCursor, # Retorna resultados como dicionários (ex: row['nome'])
+                minsize=1,
+                maxsize=5, # Limita o pool para não exceder o limite do servidor (5 conexões)
                 pool_recycle=300 # Recicla conexões a cada 5 minutos para evitar o timeout da Clever Cloud
             )
             print("✅ Conexão com o banco de dados MySQL estabelecida!")
