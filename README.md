@@ -16,7 +16,7 @@ Yes, its name comes from the AI agent.
 
 1. Clone the repository.
     ```bash
-    git clone https://github.com/Thiagoalfs/grokdcbotrecode.git
+    git clone https://github.com/Thiagoalfs/gorkdcbot.git
     ```
 2. Install the required Python packages:
    ```bash
