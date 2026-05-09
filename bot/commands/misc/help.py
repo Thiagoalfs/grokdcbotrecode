@@ -3,8 +3,8 @@ import discord, json, os
 def help(bot):
     @bot.command(name="help", aliases=["ajuda"])
     async def help_command(ctx, command: str = None):
-        # Caminho para o arquivo JSON na mesma pasta
-        json_path = os.path.join(os.path.dirname(__file__), "help.json")
+        # Ajustado para o caminho correto em bot/languages/ptbr/
+        json_path = os.path.join(os.path.dirname(__file__), "..", "..", "languages", "ptbr", "help.json")
         
         try:
             with open(json_path, 'r', encoding='utf-8') as f:

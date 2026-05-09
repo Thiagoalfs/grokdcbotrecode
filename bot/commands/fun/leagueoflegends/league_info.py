@@ -5,7 +5,7 @@ from urllib.parse import quote
 from commands.fun.leagueoflegends.riot_api_utils import fetch_riot_api
 
 def setup_league_info_command(bot):
-    @bot.command(name="leagueinfo", aliases=["lolstats"])
+    @bot.command(name="leagueinfo", aliases=["lol", "lolstats", "lolprofile", "leagueprofile"])
     async def leagueinfo(ctx, member: discord.Member = None):
         """Mostra informações de LoL de um usuário vinculado"""
         member = member or ctx.author
@@ -21,16 +21,13 @@ def setup_league_info_command(bot):
         name_encoded, tag_encoded = quote(name), quote(tag)
 
         # 1. Pegar PUUID (Account-V1)
-        print(f"[DEBUG] Buscando PUUID para: {riot_id} em americas.api.riotgames.com")
         acc_data = await fetch_riot_api(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name_encoded}/{tag_encoded}")
         if not acc_data: 
             return await ctx.send(f"❌ Conta `{riot_id}` não encontrada (Account-V1). Verifique se o nome e a tag estão corretos.")
         puuid = acc_data['puuid']
-        print(f"[DEBUG] PUUID obtido: {puuid}")
 
         # 2. Pegar Elos Diretamente por PUUID (League-V4)
         # O uso de by-puuid é o padrão atual da Riot para evitar a necessidade do summoner_id
-        print(f"[DEBUG] Buscando Elos no cluster BR1 para PUUID: {puuid}")
         league_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}")
         
         if league_data is None:

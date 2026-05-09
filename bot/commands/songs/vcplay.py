@@ -1,6 +1,5 @@
 import discord
 import nacl
-print("PyNaCl OK:", nacl.__version__)
 import os
 import asyncio, yt_dlp
 from generalFunctions import extract_info, download_single_song, convert_mp3_ytdlp, ytdlp

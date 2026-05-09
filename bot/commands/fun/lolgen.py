@@ -1,10 +1,10 @@
 import discord, random, json, os
 
 def setup_lolgen_command(bot):
-    @bot.command(name="lolgen", aliases=["lol", "build"])
-    async def lolgen(ctx):
-        # Caminho para o arquivo JSON na mesma pasta
-        json_path = os.path.join(os.path.dirname(__file__), "lolgen.json")
+    @bot.command(name="lolgen")
+    async def lolgen(ctx, *, champion_input: str = None):
+        # Caminho subindo dois níveis (de commands/fun/ para bot/) para achar a pasta languages
+        json_path = os.path.join(os.path.dirname(__file__), "..", "..", "languages", "ptbr", "lolgen.json")
         
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
@@ -18,8 +18,14 @@ def setup_lolgen_command(bot):
         boots = lol_data["boots"]
         items = lol_data["items"]
         
-        # Sorteia o campeão primeiro para usar o nome na busca da imagem
-        champion = random.choice(champions)
+        # Se um campeão foi passado como argumento, tenta encontrá-lo na lista
+        if champion_input:
+            champion = next((c for c in champions if c.lower() == champion_input.lower()), None)
+            if not champion:
+                return await ctx.send(f"❌ Não encontrei o campeão `{champion_input}` na minha lista.")
+        else:
+            # Caso contrário, sorteia um aleatório
+            champion = random.choice(champions)
         
         # Formata o nome para a URL do Data Dragon (Riot Games)
         # Remove espaços, apóstrofos e pontos

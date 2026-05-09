@@ -20,7 +20,7 @@
             "icon": ["🎶"],
             "categoria": ["Músicas"],
             "nome": ["Comando stop"],
-            "aliases": ["parar", "sair"],
+            "aliases": ["parar", "sair", "dc"],
             "descricao": ["Para de tocar músicas e sai da call"],
             "sintaxe": ["stop"]
         },
@@ -109,7 +109,7 @@
             "icon": ["🎲"],
             "categoria": ["Fun"],
             "nome": ["Comando lolgen"],
-            "aliases": ["lol", "build"],
+            "aliases": ["Nenhum"],
             "descricao": ["Gera uma build aleatória de LoL (Campeão, Rota, Feitiços e Itens)"],
             "sintaxe": ["lolgen"]
         },
@@ -125,7 +125,7 @@
             "icon": ["🎲"],
             "categoria": ["Fun"],
             "nome": ["Comando leagueinfo"],
-            "aliases": ["lolstats", "lolprofile", "leagueprofile"],
+            "aliases": ["lol,", "lolstats", "lolprofile", "leagueprofile"],
             "descricao": ["Mostra elo e maestria de um usuário vinculado"],
             "sintaxe": ["leagueinfo [@user]"]
         }

@@ -7,16 +7,24 @@ class Database:
 
     async def setup(self):
         """Inicializa o pool de conexões com o MySQL usando variáveis de ambiente."""
-        self.pool = await aiomysql.create_pool(
-            host=os.getenv("DB_HOST", "localhost"),
-            port=int(os.getenv("DB_PORT", 3306)),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            db=os.getenv("DB_NAME"),
-            autocommit=True, # Salva alterações automaticamente
-            cursorclass=aiomysql.DictCursor # Retorna resultados como dicionários (ex: row['nome'])
-        )
-        print("✅ Conexão com o banco de dados MySQL estabelecida!")
+        try:
+            host = os.getenv("DB_HOST")
+            print(f"DEBUG: Tentando conectar ao host: {host}")
+            
+            self.pool = await aiomysql.create_pool(
+                host=host,
+                port=int(os.getenv("DB_PORT", 3306)),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASS"),
+                db=os.getenv("DB_NAME"),
+                autocommit=True, # Salva alterações automaticamente
+                cursorclass=aiomysql.DictCursor, # Retorna resultados como dicionários (ex: row['nome'])
+                pool_recycle=300 # Recicla conexões a cada 5 minutos para evitar o timeout da Clever Cloud
+            )
+            print("✅ Conexão com o banco de dados MySQL estabelecida!")
+        except Exception as e:
+            print(f"❌ Erro ao conectar ao banco de dados: {e}")
+            raise e
 
     async def create_tables(self):
         """Cria a tabela de configurações caso não exista."""
@@ -37,21 +45,40 @@ class Database:
 
     async def execute(self, query, params=None):
         """Executa comandos como INSERT, UPDATE, DELETE."""
-        async with self.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(query, params or ())
-                return cur.rowcount
+        for attempt in range(2):
+            try:
+                async with self.pool.acquire() as conn:
+                    async with conn.cursor() as cur:
+                        await cur.execute(query, params or ())
+                        return cur.rowcount
+            except aiomysql.OperationalError as e:
+                # Erros 2006 (Gone away) ou 2013 (Lost connection)
+                if attempt == 0 and e.args[0] in (2006, 2013):
+                    continue
+                raise e
 
     async def fetch(self, query, params=None):
         """Busca múltiplos registros (SELECT)."""
-        async with self.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(query, params or ())
-                return await cur.fetchall()
+        for attempt in range(2):
+            try:
+                async with self.pool.acquire() as conn:
+                    async with conn.cursor() as cur:
+                        await cur.execute(query, params or ())
+                        return await cur.fetchall()
+            except aiomysql.OperationalError as e:
+                if attempt == 0 and e.args[0] in (2006, 2013):
+                    continue
+                raise e
 
     async def fetch_one(self, query, params=None):
         """Busca um único registro."""
-        async with self.pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(query, params or ())
-                return await cur.fetchone()
+        for attempt in range(2):
+            try:
+                async with self.pool.acquire() as conn:
+                    async with conn.cursor() as cur:
+                        await cur.execute(query, params or ())
+                        return await cur.fetchone()
+            except aiomysql.OperationalError as e:
+                if attempt == 0 and e.args[0] in (2006, 2013):
+                    continue
+                raise e
