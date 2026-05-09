@@ -15,12 +15,18 @@ def setup_language_command(bot):
 
         # Se não passar argumento ou o argumento for inválido, mostra as opções
         if not new_lang or new_lang.lower() not in available_langs:
+            # Busca a linguagem configurada no banco (padrão EN)
+            data = await bot.db.fetch_one("SELECT language FROM botsettings WHERE guild_id = %s", (ctx.guild.id,))
+            current_code = data['language'].lower() if data else "en"
+            current_name = available_langs.get(current_code, "English 🇺🇸")
+
             embed = discord.Embed(
                 title=responses["title"], 
                 color=discord.Color.blue()
             )
             
-            description = responses["description"]
+            description = f"{responses['current_language'].format(lang=current_name)}\n\n"
+            description += responses["description"]
             for code, name in available_langs.items():
                 description += f"• `{code}` - {name}\n"
             
