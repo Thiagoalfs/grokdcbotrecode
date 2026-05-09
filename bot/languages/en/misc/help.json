@@ -38,6 +38,14 @@
             "descricao": ["Stops the music and leaves the channel."],
             "sintaxe": ["stop"]
         },
+        "config": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Config Command"],
+            "aliases": ["settings"],
+            "descricao": ["Shows the main server configuration commands."],
+            "sintaxe": ["config"]
+        },
         "download": {
             "icon": ["🎶"],
             "categoria": ["Music"],

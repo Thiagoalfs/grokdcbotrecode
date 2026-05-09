@@ -21,7 +21,7 @@ def help(bot):
             embed.add_field(name=ui["category_fun"], value="coinflip\nlolgen\nleaguelink\nleagueinfo", inline=True)
             
             if ctx.author.guild_permissions.administrator:
-                embed.add_field(name=ui["category_admin"], value="prefix\nclear\nban\nkick\nunban", inline=True)
+                embed.add_field(name=ui["category_admin"], value="prefix\nlanguage\nconfig\nclear\nban\nkick\nunban", inline=True)
 
             embed.set_footer(text=ui["menu_footer"].format(prefix=ctx.prefix))
             return await ctx.send(embed=embed)

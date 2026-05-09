@@ -162,6 +162,14 @@
             "descricao": ["Altera o prefixo do bot"],
             "sintaxe": ["prefix <novo prefixo>"]
         },
+        "config": {
+            "icon": ["⚙️"],
+            "categoria": ["Admin"],
+            "nome": ["Comando config"],
+            "aliases": ["settings", "configurar"],
+            "descricao": ["Mostra os principais comandos de configuração do servidor."],
+            "sintaxe": ["config"]
+        },
         "clear": {
             "icon": ["⚙️"],
             "categoria": ["Admin"],
