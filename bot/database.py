@@ -31,7 +31,8 @@ class Database:
         await self.execute("""
             CREATE TABLE IF NOT EXISTS botsettings (
                 guild_id BIGINT PRIMARY KEY,
-                serverprefix VARCHAR(5) DEFAULT '.'
+                serverprefix VARCHAR(5) DEFAULT '.',
+                language VARCHAR(5) DEFAULT 'EN'
             )
         """)
 

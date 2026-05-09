@@ -1,32 +1,29 @@
 import discord, json, os
+from commands.languageservice import languageservice
 
 def help(bot):
     @bot.command(name="help", aliases=["ajuda"])
     async def help_command(ctx, command: str = None):
-        # Ajustado para o caminho correto em bot/languages/ptbr/
-        json_path = os.path.join(os.path.dirname(__file__), "..", "..", "languages", "ptbr", "help.json")
-        
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                help_data = json.load(f)
-        except Exception as e:
-            return await ctx.send(f"erro ao ler o arquivo de ajuda: {e}")
+        help_data = await languageservice(bot, ctx, "misc", "help.json")
+        if not help_data: return
+
+        ui = help_data["ui"]
 
         if not command:
-            embed = discord.Embed(title="🔎 Lista de Comandos", color=discord.Color.blue())
+            embed = discord.Embed(title=ui["menu_title"], color=discord.Color.blue())
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon.url)
                 
-            embed.add_field(name="🎶 Músicas", value="play\nstop\nskip\nqueue\nnowplaying\nbaixe", inline=True)
-            embed.add_field(name="👤 User", value="avatar\nuserinfo", inline=True)
-            embed.add_field(name="📌 Misc", value="ping", inline=True)
-            embed.add_field(name="🪄 Server", value="servericon\nserverinfo", inline=True)
-            embed.add_field(name="🎲 Fun", value="coinflip\nlolgen\nleaguelink\nleagueinfo", inline=True)
+            embed.add_field(name=ui["category_songs"], value="play\nstop\nskip\nqueue\nnowplaying\nbaixe", inline=True)
+            embed.add_field(name=ui["category_user"], value="avatar\nuserinfo", inline=True)
+            embed.add_field(name=ui["category_misc"], value="ping", inline=True)
+            embed.add_field(name=ui["category_server"], value="servericon\nserverinfo", inline=True)
+            embed.add_field(name=ui["category_fun"], value="coinflip\nlolgen\nleaguelink\nleagueinfo", inline=True)
             
             if ctx.author.guild_permissions.administrator:
-                embed.add_field(name="⚙️ Admin", value="prefix\nclear\nban\nkick\nunban", inline=True)
+                embed.add_field(name=ui["category_admin"], value="prefix\nclear\nban\nkick\nunban", inline=True)
 
-            embed.set_footer(text=f"Use {ctx.prefix}help <comando> para detalhes")
+            embed.set_footer(text=ui["menu_footer"].format(prefix=ctx.prefix))
             return await ctx.send(embed=embed)
 
         if command:
@@ -34,7 +31,8 @@ def help(bot):
             found_info = None
             
             # Procura o comando dentro das categorias do JSON
-            for category in help_data.values():
+            for key, category in help_data.items():
+                if key == "ui": continue # Pula a seção de UI na busca de comandos
                 if cmd_key in category:
                     found_info = category[cmd_key]
                     break
@@ -49,10 +47,10 @@ def help(bot):
                 aliases_list = found_info["aliases"]
                 formatted_aliases = ", ".join([f"{ctx.prefix}{a}" for a in aliases_list]) if aliases_list[0] != "Nenhum" else "Nenhum"
                 
-                embed.add_field(name="📃 Descrição", value="".join(found_info["descricao"]), inline=False)
-                embed.add_field(name="🔗 Aliases", value=formatted_aliases, inline=True)
-                embed.add_field(name="🔎 Sintaxe", value=f"`{ctx.prefix}{''.join(found_info['sintaxe'])}`", inline=True)
+                embed.add_field(name=ui["desc_title"], value="".join(found_info["descricao"]), inline=False)
+                embed.add_field(name=ui["aliases_title"], value=formatted_aliases, inline=True)
+                embed.add_field(name=ui["syntax_title"], value=f"`{ctx.prefix}{''.join(found_info['sintaxe'])}`", inline=True)
                 
                 await ctx.send(embed=embed)
             else:
-                await ctx.send(f"comando `{command}` não encontrado. use `{ctx.prefix}help` para ver a lista.")
+                await ctx.send(ui["cmd_not_found"].format(command=command, prefix=ctx.prefix))

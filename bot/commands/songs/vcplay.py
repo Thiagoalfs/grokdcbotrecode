@@ -1,7 +1,8 @@
 import discord
 import nacl
-import os
+import os, json
 import asyncio, yt_dlp
+from commands.languageservice import languageservice
 from generalFunctions import extract_info, download_single_song, convert_mp3_ytdlp, ytdlp
 
 # Dicionário global para gerenciar a fila e o estado de cada servidor
@@ -9,6 +10,7 @@ from generalFunctions import extract_info, download_single_song, convert_mp3_ytd
 song_queues = {}
 
 def setup_vc_commands(bot):
+
     async def safe_delete(file_path):
         """Tenta deletar o arquivo após um delay para o Windows liberar o handle do FFmpeg."""
         await asyncio.sleep(2)
@@ -20,6 +22,8 @@ def setup_vc_commands(bot):
 
     async def play_next(ctx):
         guild_id = ctx.guild.id
+        responses = await languageservice(bot, ctx, "songs", "vcplay.json")
+
         if ctx.guild.id not in song_queues or not song_queues[ctx.guild.id]['queue']:
             song_queues[ctx.guild.id]['current'] = None
             return
@@ -38,17 +42,19 @@ def setup_vc_commands(bot):
         # Ensure vc is still connected before trying to play
         if vc:
             vc.play(discord.FFmpegPCMAudio(next_song['file']), after=after_playing)
-            await ctx.send(f"tocando agora: **{next_song['title']}**")
+            await ctx.send(f"{responses['playing']} **{next_song['title']}**")
 
     @bot.command(name="play", aliases=["p"])
     async def play(ctx, *, url: str = None):
+        responses = await languageservice(bot, ctx, "songs", "vcplay.json")
+        
         if not url:
-            await ctx.send("manda o link ou o nome da música aí, ze. Sintaxe: .play <link/nome>")
+            await ctx.send(responses['no_url'])
             return
 
         voice_state = ctx.author.voice
         if not voice_state:
-            await ctx.send("entra num canal de voz primeiro, animal.")
+            await ctx.send(responses['no_vc'])
             return
 
         channel = voice_state.channel
@@ -62,7 +68,7 @@ def setup_vc_commands(bot):
             else:
                 vc = await channel.connect(timeout=20.0, reconnect=True)
         except Exception as e:
-            return await ctx.send(f"Deu ruim pra entrar na call, o 'DAVEY' barrou: {e}")
+            return await ctx.send(responses['joining_error'])
 
         vcsongs_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "downloadedsongs", str(ctx.guild.id), "vcsongs")
 
@@ -101,7 +107,7 @@ def setup_vc_commands(bot):
                     # É uma playlist ou resultado de busca múltipla
                     entries = list(info['entries'])
                     total_musicas = len(entries)
-                    msg_loading = await ctx.send(f"playlist detectada. carregando {total_musicas} músicas...")
+                    msg_loading = await ctx.send(f"{responses['msg_loading1']} {total_musicas} {responses['msg_loading2']}")
                     
                     # Baixa e toca a primeira música imediatamente
                     first = entries.pop(0)
@@ -115,7 +121,7 @@ def setup_vc_commands(bot):
                         
                         if vc.is_playing() or song_queues[ctx.guild.id]['current']:
                             song_queues[ctx.guild.id]['queue'].append(song_data)
-                            await ctx.send(f"adicionado à fila: **{titulo_primeira}**")
+                            await ctx.send(f"{responses['added_to_queue']} **{titulo_primeira}**")
                         else:
                             song_queues[ctx.guild.id]['current'] = song_data
                             song_data['start_time'] = bot.loop.time()
@@ -123,14 +129,14 @@ def setup_vc_commands(bot):
                                 bot.loop.create_task(safe_delete(final_primeira))
                                 bot.loop.create_task(play_next(ctx))
                             vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
-                            await ctx.send(f"tocando agora: **{titulo_primeira}**")
+                            await ctx.send(f"{responses['playing']}**{titulo_primeira}**")
                         
                         # Deleta a mensagem de carregamento da playlist
                         try:
                             await msg_loading.delete()
                         except: pass
                     except Exception as e:
-                        await ctx.send(f"Erro ao processar a primeira música de '{query}': {e}")
+                        await ctx.send(f"{responses['joining_error']}")
 
                     # O restante baixa em segundo plano
                     async def bg_download(remaining_entries):
@@ -171,7 +177,7 @@ def setup_vc_commands(bot):
                             bot.loop.create_task(safe_delete(nome_final))
                             bot.loop.create_task(play_next(ctx))
                         vc.play(discord.FFmpegPCMAudio(nome_final), after=after_playing)
-                        await ctx.send(f"tocando agora: **{titulo}**")
+                        await ctx.send(f"{responses['playing']}**{titulo}**")
                     
                     # Deleta a mensagem de carregamento da busca única
                     try:
@@ -179,6 +185,6 @@ def setup_vc_commands(bot):
                     except: pass
 
             except Exception as e:
-                await ctx.send(f"Deu erro ao processar '{query}': {e}")
+                await ctx.send(f"{responses['joining_error']}")
                 if 'nome_final' in locals() and os.path.exists(nome_final):
                     os.remove(nome_final)

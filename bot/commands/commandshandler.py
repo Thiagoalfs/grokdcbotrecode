@@ -20,6 +20,8 @@ from commands.admin.clear import setup_clear_command
 from commands.admin.ban import setup_ban_command
 from commands.admin.kick import setup_kick_command
 from commands.admin.unban import setup_unban_command
+from commands.admin.language import setup_language_command
+
 
 
 
@@ -57,6 +59,8 @@ def setup_commands(bot):
     setup_ban_command(bot)
     setup_kick_command(bot)
     setup_unban_command(bot)
+    setup_language_command(bot)
+
 
     #server
     server_icon(bot)

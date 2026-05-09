@@ -1,0 +1,8 @@
+{
+    "title": "🌍 Language Settings / Configuração de Linguagem",
+    "description": "Select an available language / Selecione uma linguagem disponível:\n\n",
+    "footer": "Usage: {prefix}language <ptbr/en>",
+    "success_ptbr": "Language changed to Portuguese! 🇧🇷",
+    "success_en": "Language changed to English! 🇺🇸",
+    "no_permission": "❌ You need `Administrator` permission to change the language."
+}

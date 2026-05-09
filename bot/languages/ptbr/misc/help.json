@@ -1,4 +1,18 @@
 {
+    "ui": {
+        "menu_title": "🔎 Lista de Comandos",
+        "category_songs": "🎶 Músicas",
+        "category_user": "👤 User",
+        "category_misc": "📌 Misc",
+        "category_server": "🪄 Server",
+        "category_fun": "🎲 Fun",
+        "category_admin": "⚙️ Admin",
+        "menu_footer": "Use {prefix}help <comando> para detalhes",
+        "cmd_not_found": "comando `{command}` não encontrado. use `{prefix}help` para ver a lista.",
+        "desc_title": "📃 Descrição",
+        "aliases_title": "🔗 Aliases",
+        "syntax_title": "🔎 Sintaxe"
+    },
     "songs": {
         "play": {
             "icon": ["🎶"],

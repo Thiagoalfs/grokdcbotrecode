@@ -1,16 +1,18 @@
 import discord, os, shutil
 from commands.songs.vcplay import song_queues
+from commands.languageservice import languageservice
 
 def setup_stop_command(bot):
     @bot.command(name="stop", aliases=["parar", "sair", "dc"])
     async def stop(ctx):
+        responses = await languageservice(bot, ctx, "songs", "stop.json")
         guild_id = ctx.guild.id
 
         if not ctx.voice_client:
-            return await ctx.send("eu nem tô em call nenhuma, ze.")
+            return await ctx.send(responses['nothing_playing'])
 
         if not ctx.author.voice or ctx.author.voice.channel != ctx.voice_client.channel:
-            return await ctx.send("tu tem que tá na call pra me parar, pnc.")
+            return await ctx.send(responses['not_in_vc'])
 
         # Para a música e desconecta
         ctx.voice_client.stop()
@@ -29,4 +31,4 @@ def setup_stop_command(bot):
         except Exception as e:
             print(f"[ERROR] Falha ao limpar pasta do servidor {guild_id}: {e}")
 
-        await ctx.send("parei tudo e saí da call. fé!")
+        await ctx.send(responses['stopped_playing'])

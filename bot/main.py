@@ -46,5 +46,4 @@ async def on_ready():
 
 setup_commands(bot)
 message_triggers(bot)
-
 bot.run(os.getenv("TOKEN"))

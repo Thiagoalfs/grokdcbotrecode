@@ -1,5 +1,6 @@
 import discord
 from commands.songs.vcplay import song_queues
+from commands.languageservice import languageservice
 
 def setup_nowplaying_command(bot):
     def format_time(seconds):
@@ -20,13 +21,14 @@ def setup_nowplaying_command(bot):
 
     @bot.command(name="nowplaying", aliases=["np", "tocando"])
     async def nowplaying(ctx):
+        responses = await languageservice(bot, ctx, "songs", "nowplaying.json")
         state = song_queues.get(ctx.guild.id)
         
         if not state or not state['current']:
-            return await ctx.send("Não tô tocando nada agora. Usa `!play`.")
+            return await ctx.send(responses['not_playing'])
         
         if not ctx.voice_client or not ctx.voice_client.is_playing():
-             return await ctx.send("O som tá pausado ou bugou, ze.")
+             return await ctx.send(responses['paused_or_bugged'])
 
         current = state['current']
         
@@ -40,7 +42,7 @@ def setup_nowplaying_command(bot):
         progress_bar = create_progress_bar(elapsed, duration)
 
         embed = discord.Embed(
-            title="🎵 Tocando Agora",
+            title=responses['embed_title'],
             description=f"**{current['title']}**\n\n{progress_bar}\n`{time_str}`",
             color=discord.Color.blue()
         )
@@ -48,6 +50,6 @@ def setup_nowplaying_command(bot):
         if current.get('thumbnail'):
             embed.set_thumbnail(url=current['thumbnail'])
         
-        embed.set_footer(text=f"Pedido por: {ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=responses['requested_by'].format(user=ctx.author.display_name), icon_url=ctx.author.display_avatar.url)
         
         await ctx.send(embed=embed)
