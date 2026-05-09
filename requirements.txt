@@ -1,0 +1,2 @@
+discord yt-dlp aiohttp python-dotenv aiomysql PyMySQL
+
