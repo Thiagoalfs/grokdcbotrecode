@@ -4,7 +4,7 @@ from commands.languageservice import languageservice
 def setup_lolgen_command(bot):
     @bot.command(name="lolgen")
     async def lolgen(ctx, *, champion_input: str = None):
-        lol_data = await languageservice(bot, ctx, "fun\league of legends", "lolgen.json")
+        lol_data = await languageservice(bot, ctx, "fun/league of legends", "lolgen.json")
         if not lol_data:
             # Fallback message if translation data cannot be loaded
             return await ctx.send(f"{lol_data['error_loading_json_data']}")

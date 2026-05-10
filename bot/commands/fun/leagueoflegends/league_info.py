@@ -9,7 +9,7 @@ def setup_league_info_command(bot):
     @bot.command(name="leagueinfo", aliases=["lol", "lolstats", "lolprofile", "leagueprofile"])
     async def leagueinfo(ctx, member: discord.Member = None):
         """Mostra informações de LoL de um usuário vinculado"""
-        responses = await languageservice(bot, ctx, "fun\league of legends", "league_info.json")
+        responses = await languageservice(bot, ctx, "fun/league of legends", "league_info.json")
         member = member or ctx.author
         data = await bot.db.fetch_one("SELECT riot_id FROM leagueconfig WHERE user_id = %s", (member.id,))
         if not data:

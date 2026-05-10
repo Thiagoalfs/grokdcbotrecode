@@ -1,5 +1,5 @@
 import discord, os, shutil, asyncio
-from generalFunctions import ytdlp, convert_mp3_ytdlp, upload_to_catbox
+from generalFunctions import ytdlp, convert_mp3_ytdlp, upload_to_litterbox
 from commands.languageservice import languageservice
 
 def setup_songs_commands(bot):
@@ -35,7 +35,8 @@ def setup_songs_commands(bot):
                 nome_final = await ytdlp(url, ydl_opts, folder=baixe_path) # ytdlp agora retorna o caminho final do .mp3 após a conversão
             
             elif "mp4" in formato.lower():
-                ydl_opts['format'] = 'bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=mp4]/bestaudio[ext=m4a]/best[ext=mp4]/best' # Prioriza MP4 em 1080p, depois 720p, com melhor áudio
+                ydl_opts['format'] = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' # Garante vídeo + áudio ou o melhor arquivo único disponível
+                ydl_opts['merge_output_format'] = 'mp4'
                 await ctx.send(responses['downloading_mp4'])
                 nome_arquivo = await ytdlp(url, ydl_opts, folder=baixe_path)
                 nome_final = nome_arquivo
@@ -44,7 +45,7 @@ def setup_songs_commands(bot):
                 if tamanho_bytes > 8 * 1024 * 1024:
                     await ctx.send(responses['video_too_large'].format(size=tamanho_bytes/(1024*1024)))
                     try:
-                        link = await upload_to_catbox(nome_final)
+                        link = await upload_to_litterbox(nome_final)
                         if link:
                             await ctx.send(responses['catbox_link'].format(link=link))
                         else:

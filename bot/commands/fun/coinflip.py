@@ -1,11 +1,10 @@
-import random, discord, json, os
+import random, discord
+from commands.languageservice import languageservice
 
 def coin_flip(bot):
     @bot.command(name="coinflip", aliases=["coin"])
     async def coin_flip(ctx):
-        json_path = os.path.join(os.path.dirname(__file__), "..", "..", "languages", "ptbr", "coinflip.json")
-        with open(json_path, 'r', encoding='utf-8') as f:
-            responses = json.load(f)
+        responses = await languageservice(bot, ctx, "fun", "coinflip.json")
 
-        result = random.choice("cara", "coroa")
+        result = random.choice(["cara", "coroa"])
         await ctx.send(result, reference=ctx.message)

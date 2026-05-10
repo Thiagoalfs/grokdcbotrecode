@@ -1,4 +1,4 @@
-import discord, random, yt_dlp, asyncio, os, aiohttp
+import discord, random, yt_dlp, asyncio, os, aiohttp, string
 
 BASE_DOWNLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloadedsongs")
 
@@ -81,21 +81,27 @@ async def download_single_song(info_dict, ydl_opts, folder=None):
             return info # Agora retorna o dicionário completo com metadados e caminho
     return await loop.run_in_executor(None, _run)
 
-async def upload_to_catbox(file_path):
-    url = "https://catbox.moe/user/api.php"
+async def upload_to_litterbox(file_path):
+    """Faz upload para o Litterbox com expiração de 1 hora e nome aleatório."""
+    url = "https://litterbox.catbox.moe/resources/internals/api.php"
     if not os.path.exists(file_path):
         return None
 
     try:
+        # Gera um nome de arquivo aleatório de 16 caracteres + extensão original
+        extension = os.path.splitext(file_path)[1]
+        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16)) + extension
+
         async with aiohttp.ClientSession() as session:
             with open(file_path, 'rb') as f:
                 data = aiohttp.FormData()
                 data.add_field('reqtype', 'fileupload')
-                data.add_field('fileToUpload', f, filename=os.path.basename(file_path))
+                data.add_field('time', '1h') # Expira em 1 hora
+                data.add_field('fileToUpload', f, filename=random_name)
                 
                 async with session.post(url, data=data) as response:
                     if response.status == 200:
                         return await response.text()
     except Exception as e:
-        print(f"Erro no upload para o Catbox: {e}")
+        print(f"Erro no upload para o Litterbox: {e}")
     return None
