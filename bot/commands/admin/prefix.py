@@ -18,6 +18,9 @@ def setup_prefix_command(bot):
             ON DUPLICATE KEY UPDATE serverprefix = %s
         """, (ctx.guild.id, new_prefix, new_prefix))
 
+        # Atualiza o cache imediatamente
+        bot.prefix_cache[ctx.guild.id] = new_prefix
+
         await ctx.send(responses["success"].format(prefix=new_prefix))
 
     @prefix.error

@@ -15,9 +15,8 @@ def setup_language_command(bot):
 
         # Se não passar argumento ou o argumento for inválido, mostra as opções
         if not new_lang or new_lang.lower() not in available_langs:
-            # Busca a linguagem configurada no banco (padrão EN)
-            data = await bot.db.fetch_one("SELECT language FROM botsettings WHERE guild_id = %s", (ctx.guild.id,))
-            current_code = data['language'].lower() if data else "en"
+            # Busca no cache
+            current_code = bot.lang_cache.get(ctx.guild.id, "EN").lower()
             current_name = available_langs.get(current_code, "English 🇺🇸")
 
             embed = discord.Embed(
@@ -42,6 +41,9 @@ def setup_language_command(bot):
             INSERT INTO botsettings (guild_id, language) VALUES (%s, %s)
             ON DUPLICATE KEY UPDATE language = %s
         """, (ctx.guild.id, lang_to_save, lang_to_save))
+
+        # Atualiza o cache imediatamente
+        bot.lang_cache[ctx.guild.id] = lang_to_save
 
         msg = responses["success_ptbr"] if lang_code == "ptbr" else responses["success_en"]
         await ctx.send(f"✅ {msg}")

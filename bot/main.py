@@ -9,12 +9,10 @@ import shutil
 load_dotenv()
 
 async def get_prefix(bot, message):
-    # Prefixo padrão caso seja DM ou o banco ainda não esteja pronto
-    if not message.guild or not hasattr(bot, 'db') or bot.db.pool is None:
+    if not message.guild:
         return "."
-    
-    data = await bot.db.fetch_one("SELECT serverprefix FROM botsettings WHERE guild_id = %s", (message.guild.id,))
-    return data['serverprefix'] if data else "."
+    # Retorna do cache; se não houver, usa o padrão "."
+    return bot.prefix_cache.get(message.guild.id, ".")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,12 +21,24 @@ intents.presences = True
 intents.voice_states = True
 
 bot = commands.Bot(command_prefix=get_prefix, intents=intents, case_insensitive=True, help_command=None)
+bot.prefix_cache = {} # Inicializa o cache de prefixos
+bot.lang_cache = {}   # Inicializa o cache de idiomas
 
 async def setup_hook():
     # Inicializa o banco de dados e anexa ao objeto bot
     bot.db = Database()
     await bot.db.setup()
     await bot.db.create_tables()
+    
+    # Popula os caches ao iniciar o bot
+    try:
+        rows = await bot.db.fetch("SELECT guild_id, serverprefix, language FROM botsettings")
+        for row in rows:
+            bot.prefix_cache[row['guild_id']] = row['serverprefix']
+            bot.lang_cache[row['guild_id']] = row['language']
+        print(f"✅ Cache carregado: {len(bot.prefix_cache)} servidores configurados.")
+    except Exception as e:
+        print(f"❌ Erro ao carregar caches no startup: {e}")
 
 bot.setup_hook = setup_hook
 
