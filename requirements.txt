@@ -4,6 +4,6 @@ aiohttp
 python-dotenv
 aiomysql
 PyMySQL
-
-
-
+pynacl
+cloudscraper
+bs4
