@@ -23,6 +23,7 @@ from commands.admin.kick import setup_kick_command
 from commands.admin.unban import setup_unban_command
 from commands.admin.language import setup_language_command
 from commands.admin.config import setup_config_command
+from commands.fun.gambling import setup_gambling_command
 
 
 
@@ -66,8 +67,9 @@ def setup_commands(bot):
     setup_language_command(bot)
     setup_config_command(bot)
 
-
-
+    #fun
+    setup_gambling_command(bot)
+    
     #server
     server_icon(bot)
     server_info(bot)

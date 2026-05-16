@@ -7,3 +7,4 @@ PyMySQL
 pynacl
 cloudscraper
 bs4
+cryptography
